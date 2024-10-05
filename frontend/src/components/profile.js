@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Button } from 'primereact/button';
 import { Menubar } from 'primereact/menubar';
-import { Card } from 'primereact/card';
 import { InputSwitch } from 'primereact/inputswitch';
-import AdvancedDemo from './advanceddemo'; 
 import { InputNumber } from 'primereact/inputnumber';
+import { Skeleton } from 'primereact/skeleton';
+const showerPath = "images\shower.jpg"
 
 
 function Home() {
@@ -17,7 +17,7 @@ function Home() {
     const start = <img alt="logo" src="https://primereact.org/images/logo.png" height="40" />;
     const end = <Button label="Sign Up" icon="pi pi-user" className="p-button-rounded" />;
     const username = "USER NAME"
-    const [pomodoroValue, setValue] = useState(50);
+    const [pomodoroValue, setValue] = useState(5);
     const [pomodoroChecked, setChecked] = useState(false);
 
     return (
@@ -32,47 +32,101 @@ function Home() {
                 
             </div>
             <div className="Pomodoro"> 
-                <header> Pomodoro </header>
+                Pomodoro
                 <InputSwitch checked={pomodoroChecked} onChange={(e) => setChecked(e.value)} />
                 <InputNumber value={pomodoroValue} onValueChange={(e) => setValue(e.value)} showButtons buttonLayout="horizontal"
                 incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" step={1} min={0} max={60} />
             </div>
 
-            {/* Cards Section */}
-            <div className="p-grid p-mt-5 p-px-4">
-                {/* Simple Card */}
-                <div className="p-col-12 p-md-4">
-                    <Card title="Simple Card">
-                        <p className="m-0">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae 
-                            numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
-                        </p>
-                    </Card>
-                </div>
-
-                {/* Additional Cards (if needed) */}
-                <div className="p-col-12 p-md-4">
-                    <Card title="Fast Development" style={{ textAlign: 'center' }}>
-                        <p>Rapidly develop UI components with minimal effort.</p>
-                    </Card>
-                </div>
-                <div className="p-col-12 p-md-4">
-                    <Card title="Customizable Themes" style={{ textAlign: 'center' }}>
-                        <p>Choose from a variety of customizable themes.</p>
-                    </Card>
-                </div>
-                <div className="p-col-12 p-md-4">
-                    <Card title="Rich Components" style={{ textAlign: 'center' }}>
-                        <p>Access to a wide variety of reusable UI components.</p>
-                    </Card>
-                </div>
-
-                {/* Advanced Card Demo */}
-                <div className="p-col-12 p-md-4">
-                    <AdvancedDemo />  {/* Add the AdvancedDemo component here */}
-                </div>
+            
+            <h1>Achievements</h1>
+            <div className="border-round border-1 surface-border p-4" style = {{
+                maxHeight: '500px',
+                overflowY: 'auto',
+            }}>
+                <ul className="m-0 p-0 list-none" style={{
+                    display: 'grid', 
+                    gridTemplateColumns: 'repeat(2, 1fr)',  /* Two equal columns */
+                    gap: '1rem'  /* Space between items */
+                }}>
+                    <li className="mb-3">
+                    <div className="flex">
+                            <Skeleton shape="circle" size="4rem" className="mr-2"></Skeleton>
+                            <div style={{ flex: '1' }}>
+                                <Skeleton width="75%" className="mb-2"></Skeleton>
+                                <Skeleton width="75%"></Skeleton>
+                            </div>
+                        </div>
+                    </li>
+                    <li className="mb-3">
+                        <div className="flex">
+                            <img src="https://primereact.org/images/logo.png" className="mr-2" style={{width: '4rem', height: '4rem', borderRadius: '50%'}}/>
+                            <div style={{ flex: '1' }}>
+                                <Skeleton width="75%" className="mb-2"></Skeleton>
+                                <Skeleton width="50%"></Skeleton>
+                            </div>
+                        </div>
+                    </li>
+                    <li className="mb-3">
+                        <div className="flex">
+                            <Skeleton shape="circle" size="4rem" className="mr-2"></Skeleton>
+                            <div style={{ flex: '1' }}>
+                                <Skeleton width="100%" className="mb-2"></Skeleton>
+                                <Skeleton width="75%"></Skeleton>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="flex">
+                            <Skeleton shape="circle" size="4rem" className="mr-2"></Skeleton>
+                            <div style={{ flex: '1' }}>
+                                <Skeleton width="100%" className="mb-2"></Skeleton>
+                                <Skeleton width="75%"></Skeleton>
+                            </div>
+                        </div>
+                    </li>
+                    <li className="mb-3">
+                    <div className="flex">
+                            <Skeleton shape="circle" size="4rem" className="mr-2"></Skeleton>
+                            <div style={{ flex: '1' }}>
+                                <Skeleton width="75%" className="mb-2"></Skeleton>
+                                <Skeleton width="75%"></Skeleton>
+                            </div>
+                        </div>
+                    </li>
+                    <li className="mb-3">
+                        <div className="flex">
+                            <Skeleton shape="circle" size="4rem" className="mr-2"></Skeleton>
+                            <div style={{ flex: '1' }}>
+                                <Skeleton width="75%" className="mb-2"></Skeleton>
+                                <Skeleton width="75%"></Skeleton>
+                            </div>
+                        </div>
+                    </li>
+                    <li className="mb-3">
+                        <div className="flex">
+                            <Skeleton shape="circle" size="4rem" className="mr-2"></Skeleton>
+                            <div style={{ flex: '1' }}>
+                                <Skeleton width="100%" className="mb-2"></Skeleton>
+                                <Skeleton width="75%"></Skeleton>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="flex">
+                            <Skeleton shape="circle" size="4rem" className="mr-2"></Skeleton>
+                            <div style={{ flex: '1' }}>
+                                <Skeleton width="100%" className="mb-2"></Skeleton>
+                                <Skeleton width="75%"></Skeleton>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
             </div>
 
+            
+
+            
             {/* Footer */}
             <footer className="footer">
                 <p></p>
