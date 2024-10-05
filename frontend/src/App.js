@@ -1,13 +1,8 @@
-import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
-import {Button} from 'primereact/button';
+import Home from './components/homepage';
 
 function App() {
   return (
-    <PrimeReactProvider>
-            <div>
-              {/* Home page here */}
-            </div>
-        </PrimeReactProvider>
+        <Home />
   );
 }
 

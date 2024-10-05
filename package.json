@@ -1,0 +1,12 @@
+{
+  "devDependencies": {
+    "tailwindcss": "^3.4.13"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "primeicons": "^7.0.0",
+    "primereact": "^10.8.3",
+    "react-scripts": "^5.0.1",
+    "web-vitals": "^4.2.3"
+  }
+}
