@@ -21,6 +21,7 @@ class User(db.Model):
     tasklist = db.relationship('Task', backref='user', lazy=True)  # One-to-many relationship with Task
     tags = db.Column(ARRAY(db.String), nullable=True)  # Array of strings for tags
     created_by = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    pomodoro = db.Column(db.Integer, nullable=False)
     
     def __init__(self, username, password, level, xp, tags):
         self.username = username
@@ -28,7 +29,7 @@ class User(db.Model):
         self.level = level
         self.xp = xp
         self.tags = tags
-
+        self.pomodoro = 0
     def __repr__(self):
         return f"User({self.username}, Level: {self.level}, XP: {self.xp})"
 
@@ -43,19 +44,21 @@ class Task(db.Model):
     start_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     end_date = db.Column(db.DateTime, nullable=False)
     state = db.Column(db.Integer, nullable=False)  # Integer to represent task state (e.g. 0 = Incomplete, 1 = Complete)
-    tag = db.Column(db.String(50), nullable=True)  # Single tag for task categorization
+    tags = db.Column(ARRAY(db.String), nullable=True)  # Single tag for task categorization
     description = db.Column(db.String(255), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Foreign Key to User
+    daily_task = db.Column(db.Integer, nullable=False)
     
-    def __init__(self, name, weight, start_date, end_date, state, tag, description, user_id):
+    def __init__(self, name, weight, start_date, end_date, state, tags, description, user_id, daily_task):
         self.name = name
         self.weight = weight
         self.start_date = start_date
         self.end_date = end_date
         self.state = state
-        self.tag = tag
+        self.tags = tags
         self.description = description
         self.user_id = user_id
+        self.daily_task = daily_task
 
     def __repr__(self):
         return f"Task({self.name}, Weight: {self.weight}, State: {self.state})"
@@ -69,7 +72,21 @@ def format_user(user):
         "xp": user.xp,
         "tags": user.tags,
         "created_by": user.created_by,
-        "tasklist": [format_task(task) for task in user.tasklist]
+        "tasklist": [format_task_user(task) for task in user.tasklist],
+        "pomodoro": user.pomodoro
+    }
+
+def format_all(user):
+    return {
+        "id": user.id,
+        "username": user.username,
+    }
+
+def format_password(user):
+    return {
+        "id": user.id,
+        "username": user.username,
+        "password": user.password
     }
 
 def format_task(task):
@@ -80,9 +97,17 @@ def format_task(task):
         "start_date": task.start_date,
         "end_date": task.end_date,
         "state": task.state,
-        "tag": task.tag,
+        "tags": task.tags,
         "description": task.description,
-        "user_id": task.user_id
+        "user_id": task.user_id,
+        "daily_task": task.daily_task
+    }
+
+def format_task_user(task):
+    return {
+        "id": task.id,
+        "name": task.name,
+        "state": task.state
     }
 
 # API Endpoints
@@ -112,10 +137,35 @@ def create_task(user_id):
         start_date=datetime.strptime(data['start_date'], '%Y-%m-%d %H:%M:%S'),
         end_date=datetime.strptime(data['end_date'], '%Y-%m-%d %H:%M:%S'),
         state=data['state'],
-        tag=data['tag'],
+        tags=data['tags'],
         description=data['description'],
-        user_id=user_id
+        user_id=user_id,
+        daily_task=data['daily_task']
     )
+
+
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    new_tags = data.get('tags', [])  # Safely get the 'tags' value from the incoming data; default to empty list
+
+    if not isinstance(new_tags, list):
+        return jsonify({"error": "Tags must be provided as an array"}), 400  # Return error if not a list
+
+    # Ensure the tags field is initialized as a list
+    if user.tags is None:
+        user.tags = []  # Initialize as an empty list if tags is None
+    elif not isinstance(user.tags, list):
+        user.tags = []  # Ensure it is a list if it was not initialized correctly
+
+    # Debugging: Check the current tags
+    print(f"Current tags before appending: {user.tags}")
+
+    # Remove duplicates from new_tags
+    new_tags_set = set(new_tags)  # Convert to a set to eliminate duplicates
+
+    # Concatenate the new tags that do not already exist in user.tags
+    user.tags = list(set(user.tags) | new_tags_set)
     db.session.add(task)
     db.session.commit()
     return format_task(task), 201
@@ -124,7 +174,19 @@ def create_task(user_id):
 @app.route('/users', methods=['GET'])
 def get_users():
     users = User.query.all()
-    return jsonify([format_user(user) for user in users])
+    return jsonify([format_all(user) for user in users])
+
+# Get one users
+@app.route('/users/<user_id>/', methods=['GET'])
+def get_user(user_id):
+    user = User.query.get(user_id)
+    return jsonify([format_user(user)])
+
+# Get one users
+@app.route('/users/<user_id>/password', methods=['GET'])
+def get_user_password(user_id):
+    user = User.query.get(user_id)
+    return jsonify([format_password(user)])
 
 # Get all tasks for a user
 @app.route('/users/<user_id>/tasks', methods=['GET'])
@@ -143,6 +205,7 @@ def update_user(id):
     user.level = data.get('level', user.level)
     user.xp = data.get('xp', user.xp)
     user.tags = data.get('tags', user.tags)
+    user.pomodoro = data.get('pomodoro', user.pomodoro)
     
     db.session.commit()
     return format_user(user)
