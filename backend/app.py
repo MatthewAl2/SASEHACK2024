@@ -5,9 +5,8 @@ from flask_cors import CORS
 
 from flask import Flask, request, jsonify
 import torch
-from transformers import BertTokenizer, BertModel
-import torch.nn as nn
-from task_weight_prediction.DNN import TaskWeightModel, TaskDataset, DataLoader, train_model, evaluate_model
+from transformers import BertTokenizer
+from task_weight_prediction.DNN import TaskWeightModel
 from sqlalchemy.dialects.postgresql import ARRAY
 
 app = Flask(__name__)
