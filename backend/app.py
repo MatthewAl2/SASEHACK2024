@@ -3,11 +3,54 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_cors import CORS
 
+from flask import Flask, request, jsonify
+import torch
+from transformers import BertTokenizer, BertModel
+import torch.nn as nn
+from task_weight_prediction.DNN import TaskWeightModel, TaskDataset, DataLoader, train_model, evaluate_model
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost/SASEHACK2024'
 db = SQLAlchemy(app)
 CORS(app)
+
+# Initialize tokenizer and model
+tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+model = TaskWeightModel(bert_model_name='bert-base-uncased')
+
+# Load the saved model weights
+model.load_state_dict(torch.load('task_weight_prediction/task_weight_model.pth'))
+model.eval()  # Set the model to evaluation mode
+
+# Define max sequence length for tokenization
+max_len = 50
+
+# Route to get task weight
+@app.route('/predict_task_weight', methods=['POST'])
+def predict():
+    data = request.json
+    task_description = data.get('task')
+    
+    # Tokenize the input text
+    encoding = tokenizer.encode_plus(
+        task_description,
+        add_special_tokens=True,
+        max_length=max_len,
+        padding='max_length',
+        return_attention_mask=True,
+        return_tensors='pt',
+        truncation=True
+    )
+
+    input_ids = encoding['input_ids']
+    attention_mask = encoding['attention_mask']
+
+    # Make prediction using the model
+    with torch.no_grad():
+        output = model(input_ids=input_ids, attention_mask=attention_mask)
+        predicted_weight = output.item()  # Get the predicted task weight
+
+    return jsonify({'predicted_weight': predicted_weight})
 
 class Event(db.Model):
    id = db.Column(db.Integer, primary_key=True)

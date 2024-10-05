@@ -1,12 +1,12 @@
-import pandas as pd
 import torch
 import torch.nn as nn
-import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 from sklearn.model_selection import train_test_split
-from transformers import BertTokenizer, BertModel
+from transformers import BertModel
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, accuracy_score
 from tqdm import tqdm
-df = pd.read_csv('tasks_data.csv')
+
+
 # Defining the Neural Network Model
 class TaskWeightModel(nn.Module):
     def __init__(self, bert_model_name, dropout=0.3):
@@ -23,6 +23,8 @@ class TaskWeightModel(nn.Module):
         pooled_output = bert_outputs.pooler_output  # CLS token output
         output = self.drop(pooled_output)
         return self.out(output)
+
+# Custom Dataset Class
 class TaskDataset(Dataset):
    def __init__(self, tasks, weights, tokenizer, max_len):
       self.tasks = tasks
@@ -52,36 +54,6 @@ class TaskDataset(Dataset):
          'weight': torch.tensor(weight, dtype=torch.float)
       }
 
-# Data Preparation
-'''
-features: task descriptions
-labels: task weights
-'''
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-tasks = df['Task'] # List of tasks from dataset
-weights = df['Weight'] # Corresponding weight scores
-max_len = 50  # Max length for tokenization
-
-# Splitting the data
-# Splitting the data and resetting index
-train_tasks, test_tasks, train_weights, test_weights = train_test_split(tasks, weights, test_size=0.2)
-
-train_tasks = train_tasks.reset_index(drop=True)
-test_tasks = test_tasks.reset_index(drop=True)
-train_weights = train_weights.reset_index(drop=True)
-test_weights = test_weights.reset_index(drop=True)
-
-train_dataset = TaskDataset(train_tasks, train_weights, tokenizer, max_len)
-test_dataset = TaskDataset(test_tasks, test_weights, tokenizer, max_len)
-
-train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True)
-val_loader = DataLoader(test_dataset, batch_size=16)
-
-# Model Initialization
-model = TaskWeightModel(bert_model_name='bert-base-uncased')
-optimizer = optim.Adam(model.parameters(), lr=2e-5)
-loss_fn = nn.MSELoss()
-
 # Training Loop
 def train_model(model, loader, optimizer, loss_fn, epochs=5):
    device = torch.device('cpu')
@@ -103,11 +75,8 @@ def train_model(model, loader, optimizer, loss_fn, epochs=5):
          optimizer.step()
          train_loss += loss.item()
       
-      print(f'Epoch {epoch + 1}, Train Loss: {train_loss / len(train_loader)}')
+      print(f'Epoch {epoch + 1}, Train Loss: {train_loss / len(loader)}')
 
-# Train the model
-train_model(model, train_loader, optimizer, loss_fn, epochs=1)
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, accuracy_score
 
 def evaluate_model(model, val_loader):
    model.eval()  # Set the model to evaluation mode
@@ -139,6 +108,4 @@ def evaluate_model(model, val_loader):
    
    return mse, mae, r2
 
-# Call the evaluation function
-evaluate_model(model, val_loader)
 
