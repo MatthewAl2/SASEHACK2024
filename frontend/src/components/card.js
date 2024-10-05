@@ -58,34 +58,35 @@ const Card = ({
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center',
+                            gap: '10px',
+                            flexWrap: 'wrap',
                         }}
                     >
-                        <div>
-                            {!card.isEditing ? (
+                        {!card.isEditing ? (
+                            <Button
+                                label="Edit"
+                                icon="pi pi-pencil"
+                                onClick={onEditToggle}
+                                aria-label="Edit Task"
+                            />
+                        ) : (
+                            <>
                                 <Button
-                                    label="Edit"
-                                    icon="pi pi-pencil"
-                                    onClick={onEditToggle}
-                                    aria-label="Edit Task"
+                                    label="Save"
+                                    icon="pi pi-check"
+                                    onClick={onSave}
+                                    aria-label="Save Task"
+                                    style={{ flex: 1 }}
                                 />
-                            ) : (
-                                <>
-                                    <Button
-                                        label="Save"
-                                        icon="pi pi-check"
-                                        onClick={onSave}
-                                        aria-label="Save Task"
-                                    />
-                                    <Button
-                                        label="Cancel"
-                                        icon="pi pi-times"
-                                        onClick={onCancel}
-                                        style={{ marginLeft: '0.5em' }}
-                                        aria-label="Cancel Edit"
-                                    />
-                                </>
-                            )}
-                        </div>
+                                <Button
+                                    label="Cancel"
+                                    icon="pi pi-times"
+                                    onClick={onCancel}
+                                    aria-label="Cancel Edit"
+                                    style={{ marginLeft: 'auto', flex: 1 }}
+                                />
+                            </>
+                        )}
                         {!card.isEditing && (
                             <Button
                                 label="Remove"
@@ -93,6 +94,7 @@ const Card = ({
                                 onClick={onRemove}
                                 className="p-button-danger"
                                 aria-label="Remove Task"
+                                style={{ marginLeft: 'auto' }}
                             />
                         )}
                     </div>
@@ -102,31 +104,34 @@ const Card = ({
                     borderRadius: '20px',
                 }}
             >
-                <div style={{ textAlign: 'center', padding: '10px' }}>
-                    {card.isEditing ? (
-                        <textarea
-                            value={card.content}
-                            onChange={(e) => onContentChange('content', e.target.value)}
-                            style={{ width: '100%', height: '100px', textAlign: 'center' }}
-                            aria-label="Task Content"
-                        />
-                    ) : (
-                        <p className="m-0">{card.content}</p>
-                    )}
-                    <div style={{ marginTop: '10px' }}>
-                        <Dropdown
-                            options={statusOptions}
-                            value={card.status}
-                            onChange={(e) => {
-                                onStatusChange(card.id, e.value);
-                            }}
-                            placeholder="Select Status"
-                            style={{ width: '100%' }}
-                            aria-label="Task Status"
-                        />
+                {/* New layout for centering description */}
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%'}}>
+                    <div style={{ textAlign: 'center', padding: '10px' }}>
+                        {card.isEditing ? (
+                            <textarea
+                                value={card.content}
+                                onChange={(e) => onContentChange('content', e.target.value)}
+                                style={{ width: '100%', height: '100px', textAlign: 'center' }}
+                                aria-label="Task Content"
+                            />
+                        ) : (
+                            <p className="m-0">{card.content}</p>
+                        )}
+                        <div style={{ marginTop: '10px' }}>
+                            <Dropdown
+                                options={statusOptions}
+                                value={card.status}
+                                onChange={(e) => {
+                                    onStatusChange(card.id, e.value);
+                                }}
+                                placeholder="Select Status"
+                                style={{ width: '100%' }}
+                                aria-label="Task Status"
+                            />
+                        </div>
                     </div>
                     {/* Display Start Date and Due Date */}
-                    <div style={{ marginTop: '10px' }}>
+                    <div style={{ textAlign: 'center', marginTop: 'auto', padding: '10px' }}>
                         {card.isEditing ? (
                             <>
                                 <div>
@@ -154,11 +159,11 @@ const Card = ({
                                         type="number"
                                         value={card.weight}
                                         onChange={(e) => {
-                                            const weightValue = Math.min(Math.max(Number(e.target.value), 1), 25); // Ensure within bounds
+                                            const weightValue = Math.min(Math.max(Number(e.target.value), 1), 25);
                                             onContentChange('weight', weightValue);
                                         }}
-                                        min="1" // Set a minimum value
-                                        max="25" // Set a maximum value
+                                        min="1"
+                                        max="25"
                                         style={{ width: '100%' }}
                                         aria-label="Task Weight"
                                     />

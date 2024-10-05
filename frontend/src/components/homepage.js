@@ -8,7 +8,7 @@ import Ease_Logo from '../images/Ease Logo.png';
 import { Calendar } from 'primereact/calendar';
 
 export default function Home() {
-    const initialCards = []; // Set initial cards to an empty array
+    const initialCards = [];
 
     const loadCards = () => {
         const savedCards = localStorage.getItem('cards');
@@ -21,7 +21,7 @@ export default function Home() {
     const [newCardContent, setNewCardContent] = useState('');
     const [displayDialog, setDisplayDialog] = useState(false);
     const [startDate, setStartDate] = useState(null);
-    const [dueDate, setDueDate] = useState(null);    
+    const [dueDate, setDueDate] = useState(null);
     const [taskWeight, setTaskWeight] = useState(1); // Default weight
 
     useEffect(() => {
@@ -58,7 +58,7 @@ export default function Home() {
                 if (card.id === id) {
                     const updatedCard = { ...card, completed: !card.completed };
                     const newStatus = updatedCard.completed ? 'Completed' : 'Not Started';
-                    return { ...updatedCard, status: newStatus }; // Update status based on completed state
+                    return { ...updatedCard, status: newStatus };
                 }
                 return card;
             })
@@ -96,7 +96,7 @@ export default function Home() {
             setTaskWeight(1); // Reset task weight
             setDisplayDialog(false);
         }
-    };      
+    };
 
     const removeCard = (id) => {
         setCards((prevCards) => prevCards.filter((card) => card.id !== id));
@@ -131,7 +131,6 @@ export default function Home() {
     const inProgressTasks = cards.filter(card => card.status === 'In Progress');
     const completedTasks = cards.filter(card => card.status === 'Completed');
 
-    // Combine all tasks, prioritizing Not Started and In Progress
     const allTasks = [...notStartedTasks, ...inProgressTasks, ...completedTasks];
 
     return (
@@ -151,19 +150,18 @@ export default function Home() {
             />
 
             <div style={{ maxWidth: '1200px', margin: '0 auto', marginTop: '20px', display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-                {/* Render cards based on the active tab */}
                 {activeTab === 'All Tasks' ? (
                     allTasks.length > 0 ? (
                         allTasks.map((card) => (
                             <div key={card.id} style={{ margin: '10px' }}>
                                 <Card
                                     card={card}
-                                    weight={card.weight} // Pass the weight to the Card
+                                    weight={card.weight}
                                     onEditToggle={() => toggleEdit(card.id)}
                                     onSave={() => saveCard(card.id)}
                                     onCancel={() => toggleEdit(card.id)}
                                     onContentChange={(field, value) => updateCardContent(card.id, field, value)}
-                                    onDateChange={updateCardDate}  // Pass the date change handler
+                                    onDateChange={updateCardDate}
                                     onMarkComplete={() => toggleCompleted(card.id)}
                                     onStatusChange={changeCardStatus}
                                     onRemove={() => removeCard(card.id)}
@@ -178,7 +176,7 @@ export default function Home() {
                         <div key={card.id} style={{ margin: '10px' }}>
                             <Card
                                 card={card}
-                                weight={card.weight} // Pass the weight to the Card
+                                weight={card.weight}
                                 onEditToggle={() => toggleEdit(card.id)}
                                 onSave={() => saveCard(card.id)}
                                 onCancel={() => toggleEdit(card.id)}
@@ -232,7 +230,6 @@ export default function Home() {
                 )}
             </div>
 
-            {/* Floating Plus Button */}
             <Button
                 icon="pi pi-plus"
                 style={{
@@ -247,59 +244,76 @@ export default function Home() {
                 onClick={() => setDisplayDialog(true)}
             />
 
-            {/* Dialog for Adding Card */}
-            <Dialog header="Add New Card" visible={displayDialog} onHide={() => setDisplayDialog(false)}>
-        <div>
-            <input
-                type="text"
-                placeholder="Card Title"
-                value={newCardTitle}
-                onChange={(e) => setNewCardTitle(e.target.value)}
-            />
-            <textarea
-                placeholder="Card Content"
-                value={newCardContent}
-                onChange={(e) => setNewCardContent(e.target.value)}
-            />
-            
-            {/* Start Date Calendar */}
-            <div style={{ marginTop: '20px' }}>
-                <label htmlFor="startDate">Start Date:</label>
-                <Calendar
-                    id="startDate"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.value)}
-                    showIcon
+            <Dialog
+                header="Add Task"
+                visible={displayDialog}
+                style={{ width: '50vw' }}
+                onHide={() => setDisplayDialog(false)}
+            >
+                <div>
+                    <div className="p-field" style={{ marginBottom: '1rem' }}>
+                        <label htmlFor="title">Task Title</label>
+                        <input
+                            type="text"
+                            id="title"
+                            value={newCardTitle}
+                            onChange={(e) => setNewCardTitle(e.target.value)}
+                            style={{ width: '100%' }}
+                        />
+                    </div>
+
+                    <div className="p-field" style={{ marginBottom: '1rem' }}>
+                        <label htmlFor="description">Task Description</label>
+                        <textarea
+                            id="description"
+                            rows="5"
+                            value={newCardContent}
+                            onChange={(e) => setNewCardContent(e.target.value)}
+                            style={{ width: '100%' }}
+                        />
+                    </div>
+
+                    <div className="p-field" style={{ marginBottom: '1rem' }}>
+                        <label htmlFor="startDate">Start Date</label>
+                        <Calendar
+                            id="startDate"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.value)}
+                            style={{ width: '100%' }}
+                        />
+                    </div>
+
+                    <div className="p-field" style={{ marginBottom: '1rem' }}>
+                        <label htmlFor="dueDate">Due Date</label>
+                        <Calendar
+                            id="dueDate"
+                            value={dueDate}
+                            onChange={(e) => setDueDate(e.value)}
+                            style={{ width: '100%' }}
+                        />
+                    </div>
+
+                    <div className="p-field" style={{ marginBottom: '1rem' }}>
+                        <label htmlFor="taskWeight">Task Weight (1-5)</label>
+                        <input
+                            type="number"
+                            id="taskWeight"
+                            min="1"
+                            max="5"
+                            value={taskWeight}
+                            onChange={(e) => setTaskWeight(parseInt(e.target.value))}
+                            style={{ width: '100%' }}
+                        />
+                    </div>
+                </div>
+
+                <Button
+                    label="Add"
+                    icon="pi pi-check"
+                    onClick={addCard}
+                    style={{ marginTop: '20px', width: '100%' }}
                 />
-            </div>
-            
-            {/* Due Date Calendar */}
-            <div style={{ marginTop: '20px' }}>
-                <label htmlFor="dueDate">Due Date:</label>
-                <Calendar
-                    id="dueDate"
-                    value={dueDate}
-                    onChange={(e) => setDueDate(e.value)}
-                    showIcon
-                />
-            </div>
-            
-            {/* Task Weight Input */}
-            <div style={{ marginTop: '20px' }}>
-                <label htmlFor="taskWeight">Task Weight:</label>
-                <input
-                    type="number"
-                    id="taskWeight"
-                    value={taskWeight}
-                    onChange={(e) => setTaskWeight(Number(e.target.value))}
-                    min="1" // Optional: Set a minimum value
-                />
-            </div>
-        </div>
-        <div style={{ marginTop: '20px' }}>
-            <Button label="Add Card" onClick={addCard} />
-        </div>
-    </Dialog>
+            </Dialog>
         </div>
     );
 }
