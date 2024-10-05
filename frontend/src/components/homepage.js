@@ -1,10 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'primereact/button';
 import { Menubar } from 'primereact/menubar';
-import { Card } from 'primereact/card';
-import AdvancedDemo from './advanceddemo'; 
+import { TabMenu } from 'primereact/tabmenu'; // Import TabMenu
+import Card from './card'; // Import the Card component
 
-function Home() {
+export default function Home() {
+    const initialCards = [
+        { id: 1, title: "Shower", content: "Go shower cs major", isEditing: false },
+        { id: 2, title: "Study", content: "Study for the exam", isEditing: false },
+        { id: 3, title: "Exercise", content: "Do some exercise", isEditing: false },
+        { id: 4, title: "Grocery Shopping", content: "Buy groceries for the week", isEditing: false }, // New card
+    ];
+
+    const [cards, setCards] = useState(initialCards);
+    const [activeTab, setActiveTab] = useState('Tasks'); // State to track the active tab
+
+    const toggleEdit = (id) => {
+        setCards((prevCards) =>
+            prevCards.map((card) =>
+                card.id === id
+                    ? { ...card, isEditing: !card.isEditing }
+                    : card
+            )
+        );
+    };
+
+    const saveCard = (id) => {
+        toggleEdit(id); // Just toggle editing mode
+    };
+
+    const updateCardContent = (id, field, value) => {
+        setCards((prevCards) =>
+            prevCards.map((card) =>
+                card.id === id
+                    ? { ...card, [field]: value }
+                    : card
+            )
+        );
+    };
+
     const items = [
         { label: 'Home', icon: 'pi pi-home' },
         { label: 'About', icon: 'pi pi-info-circle' },
@@ -14,59 +48,60 @@ function Home() {
     const start = <img alt="logo" src="https://primereact.org/images/logo.png" height="40" />;
     const end = <Button label="Sign Up" icon="pi pi-user" className="p-button-rounded" />;
 
+    const tabItems = [
+        { label: 'Tasks', icon: 'pi pi-list' },
+        { label: 'Completed', icon: 'pi pi-check' },
+        { label: 'Archived', icon: 'pi pi-archive' }
+    ];
+
     return (
         <div className="App">
-            {/* Navbar */}
             <Menubar model={items} start={start} end={end} />
 
-            {/* Hero Section */}
-            <div className="hero">
+            <div className="hero" style={{ textAlign: 'center', marginTop: '20px' }}>
                 <h1>Welcome to PrimeReact</h1>
                 <p>Build beautiful, performant UI with PrimeReact components.</p>
-                <Button label="Get Started" icon="pi pi-arrow-right" className="p-button-success p-button-lg" />
+                <Button label="Submit" />
             </div>
 
-            {/* Cards Section */}
-            <div className="p-grid p-mt-5 p-px-4">
-                {/* Simple Card */}
-                <div className="p-col-12 p-md-4">
-                    <Card title="Simple Card">
-                        <p className="m-0">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae 
-                            numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
-                        </p>
-                    </Card>
-                </div>
+            {/* Tab Menu Above Card Container */}
+            <TabMenu 
+                model={tabItems} 
+                activeIndex={tabItems.findIndex(item => item.label === activeTab)} 
+                onTabChange={(e) => setActiveTab(e.value.label)} 
+                style={{ marginTop: '20px' }} 
+            />
 
-                {/* Additional Cards (if needed) */}
-                <div className="p-col-12 p-md-4">
-                    <Card title="Fast Development" style={{ textAlign: 'center' }}>
-                        <p>Rapidly develop UI components with minimal effort.</p>
-                    </Card>
-                </div>
-                <div className="p-col-12 p-md-4">
-                    <Card title="Customizable Themes" style={{ textAlign: 'center' }}>
-                        <p>Choose from a variety of customizable themes.</p>
-                    </Card>
-                </div>
-                <div className="p-col-12 p-md-4">
-                    <Card title="Rich Components" style={{ textAlign: 'center' }}>
-                        <p>Access to a wide variety of reusable UI components.</p>
-                    </Card>
-                </div>
-
-                {/* Advanced Card Demo */}
-                <div className="p-col-12 p-md-4">
-                    <AdvancedDemo />  {/* Add the AdvancedDemo component here */}
-                </div>
+            <div
+                className="card-container"
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center', // Center cards in the container
+                    width: '100%',
+                    height: '70vh',
+                    padding: '10px',
+                    overflow: 'auto',
+                }}
+            >
+                {/* Render cards based on the active tab */}
+                {activeTab === 'Tasks' && cards.map((card) => (
+                    <div key={card.id} style={{ width: '20%', margin: '0 10px' }}> {/* Adjust the width and margin */}
+                        <Card
+                            card={card}
+                            onEditToggle={() => toggleEdit(card.id)}
+                            onSave={() => saveCard(card.id)}
+                            onCancel={() => toggleEdit(card.id)}
+                            onContentChange={(field, value) => updateCardContent(card.id, field, value)}
+                        />
+                    </div>
+                ))}
+                {activeTab === 'Completed' && <p>No completed tasks yet.</p>}
+                {activeTab === 'Archived' && <p>No archived tasks yet.</p>}
             </div>
 
-            {/* Footer */}
-            <footer className="footer">
+            <footer className="footer" style={{ textAlign: 'center', marginTop: '20px' }}>
                 <p>© 2024 PrimeReact Homepage. All rights reserved.</p>
             </footer>
         </div>
     );
 }
-
-export default Home;
