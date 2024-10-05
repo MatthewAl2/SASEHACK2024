@@ -22,6 +22,7 @@ export default function Home() {
     const [displayDialog, setDisplayDialog] = useState(false);
     const [startDate, setStartDate] = useState(null);
     const [dueDate, setDueDate] = useState(null);    
+    const [taskWeight, setTaskWeight] = useState(1); // Default weight
 
     useEffect(() => {
         localStorage.setItem('cards', JSON.stringify(cards));
@@ -84,16 +85,18 @@ export default function Home() {
                 completed: false,
                 status: 'Not Started',
                 startDate: startDate,
-                dueDate: dueDate
+                dueDate: dueDate,
+                weight: taskWeight // Add weight to the new card
             };
             setCards([...cards, newCard]);
             setNewCardTitle('');
             setNewCardContent('');
-            setStartDate(null);  // Reset start date
-            setDueDate(null);     // Reset due date
+            setStartDate(null);
+            setDueDate(null);
+            setTaskWeight(1); // Reset task weight
             setDisplayDialog(false);
         }
-    };    
+    };      
 
     const removeCard = (id) => {
         setCards((prevCards) => prevCards.filter((card) => card.id !== id));
@@ -110,7 +113,6 @@ export default function Home() {
     };
 
     const items = [
-        { label: 'Home', icon: 'pi pi-home' },
         { label: 'About', icon: 'pi pi-info-circle' },
         { label: 'Contact', icon: 'pi pi-envelope' }
     ];
@@ -156,6 +158,7 @@ export default function Home() {
                             <div key={card.id} style={{ margin: '10px' }}>
                                 <Card
                                     card={card}
+                                    weight={card.weight} // Pass the weight to the Card
                                     onEditToggle={() => toggleEdit(card.id)}
                                     onSave={() => saveCard(card.id)}
                                     onCancel={() => toggleEdit(card.id)}
@@ -175,6 +178,7 @@ export default function Home() {
                         <div key={card.id} style={{ margin: '10px' }}>
                             <Card
                                 card={card}
+                                weight={card.weight} // Pass the weight to the Card
                                 onEditToggle={() => toggleEdit(card.id)}
                                 onSave={() => saveCard(card.id)}
                                 onCancel={() => toggleEdit(card.id)}
@@ -245,45 +249,57 @@ export default function Home() {
 
             {/* Dialog for Adding Card */}
             <Dialog header="Add New Card" visible={displayDialog} onHide={() => setDisplayDialog(false)}>
-            <div>
-                <input
-                    type="text"
-                    placeholder="Card Title"
-                    value={newCardTitle}
-                    onChange={(e) => setNewCardTitle(e.target.value)}
-                />
-                <textarea
-                    placeholder="Card Content"
-                    value={newCardContent}
-                    onChange={(e) => setNewCardContent(e.target.value)}
-                />
-                
-                {/* Start Date Calendar */}
-                <div style={{ marginTop: '20px' }}>
-                    <label htmlFor="startDate">Start Date:</label>
-                    <Calendar
-                        id="startDate"
-                        value={startDate}
-                        onChange={(e) => setStartDate(e.value)}
-                        showIcon
-                    />
-                </div>
-                
-                {/* Due Date Calendar */}
-                <div style={{ marginTop: '20px' }}>
-                    <label htmlFor="dueDate">Due Date:</label>
-                    <Calendar
-                        id="dueDate"
-                        value={dueDate}
-                        onChange={(e) => setDueDate(e.value)}
-                        showIcon
-                    />
-                </div>
-            </div>
+        <div>
+            <input
+                type="text"
+                placeholder="Card Title"
+                value={newCardTitle}
+                onChange={(e) => setNewCardTitle(e.target.value)}
+            />
+            <textarea
+                placeholder="Card Content"
+                value={newCardContent}
+                onChange={(e) => setNewCardContent(e.target.value)}
+            />
+            
+            {/* Start Date Calendar */}
             <div style={{ marginTop: '20px' }}>
-                <Button label="Add Card" onClick={addCard} />
+                <label htmlFor="startDate">Start Date:</label>
+                <Calendar
+                    id="startDate"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.value)}
+                    showIcon
+                />
             </div>
-        </Dialog>
+            
+            {/* Due Date Calendar */}
+            <div style={{ marginTop: '20px' }}>
+                <label htmlFor="dueDate">Due Date:</label>
+                <Calendar
+                    id="dueDate"
+                    value={dueDate}
+                    onChange={(e) => setDueDate(e.value)}
+                    showIcon
+                />
+            </div>
+            
+            {/* Task Weight Input */}
+            <div style={{ marginTop: '20px' }}>
+                <label htmlFor="taskWeight">Task Weight:</label>
+                <input
+                    type="number"
+                    id="taskWeight"
+                    value={taskWeight}
+                    onChange={(e) => setTaskWeight(Number(e.target.value))}
+                    min="1" // Optional: Set a minimum value
+                />
+            </div>
+        </div>
+        <div style={{ marginTop: '20px' }}>
+            <Button label="Add Card" onClick={addCard} />
+        </div>
+    </Dialog>
         </div>
     );
 }

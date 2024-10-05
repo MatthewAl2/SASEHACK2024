@@ -45,6 +45,7 @@ const Card = ({
                                 value={card.title}
                                 onChange={(e) => onContentChange('title', e.target.value)}
                                 style={{ width: '100%', textAlign: 'center' }}
+                                aria-label="Task Title"
                             />
                         ) : (
                             <h3 style={{ textAlign: 'center' }}>{card.title}</h3>
@@ -60,25 +61,27 @@ const Card = ({
                         }}
                     >
                         <div>
-                            {!card.isEditing && (
+                            {!card.isEditing ? (
                                 <Button
                                     label="Edit"
                                     icon="pi pi-pencil"
                                     onClick={onEditToggle}
+                                    aria-label="Edit Task"
                                 />
-                            )}
-                            {card.isEditing && (
+                            ) : (
                                 <>
                                     <Button
                                         label="Save"
                                         icon="pi pi-check"
                                         onClick={onSave}
+                                        aria-label="Save Task"
                                     />
                                     <Button
                                         label="Cancel"
                                         icon="pi pi-times"
                                         onClick={onCancel}
                                         style={{ marginLeft: '0.5em' }}
+                                        aria-label="Cancel Edit"
                                     />
                                 </>
                             )}
@@ -89,6 +92,7 @@ const Card = ({
                                 icon="pi pi-times"
                                 onClick={onRemove}
                                 className="p-button-danger"
+                                aria-label="Remove Task"
                             />
                         )}
                     </div>
@@ -104,6 +108,7 @@ const Card = ({
                             value={card.content}
                             onChange={(e) => onContentChange('content', e.target.value)}
                             style={{ width: '100%', height: '100px', textAlign: 'center' }}
+                            aria-label="Task Content"
                         />
                     ) : (
                         <p className="m-0">{card.content}</p>
@@ -117,6 +122,7 @@ const Card = ({
                             }}
                             placeholder="Select Status"
                             style={{ width: '100%' }}
+                            aria-label="Task Status"
                         />
                     </div>
                     {/* Display Start Date and Due Date */}
@@ -129,6 +135,7 @@ const Card = ({
                                         value={card.startDate}
                                         onChange={(e) => onContentChange('startDate', e.value)}
                                         showIcon
+                                        aria-label="Start Date"
                                     />
                                 </div>
                                 <div>
@@ -137,7 +144,29 @@ const Card = ({
                                         value={card.dueDate}
                                         onChange={(e) => onContentChange('dueDate', e.value)}
                                         showIcon
+                                        aria-label="Due Date"
                                     />
+                                </div>
+                                {/* Editable Task Weight */}
+                                <div style={{ marginTop: '10px' }}>
+                                    <label>Task Weight:</label>
+                                    <input
+                                        type="number"
+                                        value={card.weight}
+                                        onChange={(e) => {
+                                            const weightValue = Math.min(Math.max(Number(e.target.value), 1), 25); // Ensure within bounds
+                                            onContentChange('weight', weightValue);
+                                        }}
+                                        min="1" // Set a minimum value
+                                        max="25" // Set a maximum value
+                                        style={{ width: '100%' }}
+                                        aria-label="Task Weight"
+                                    />
+                                    {card.weight < 1 || card.weight > 25 ? (
+                                        <span style={{ color: 'red', fontSize: '0.8em' }}>
+                                            Weight must be between 1 and 25.
+                                        </span>
+                                    ) : null}
                                 </div>
                             </>
                         ) : (
