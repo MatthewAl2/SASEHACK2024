@@ -4,6 +4,8 @@ import { Menubar } from 'primereact/menubar';
 import { TabMenu } from 'primereact/tabmenu';
 import Card from './card';
 import { Dialog } from 'primereact/dialog';
+import Ease_Logo from '../images/Ease Logo.png';
+import { Calendar } from 'primereact/calendar';
 
 export default function Home() {
     const initialCards = []; // Set initial cards to an empty array
@@ -14,10 +16,12 @@ export default function Home() {
     };
 
     const [cards, setCards] = useState(loadCards);
-    const [activeTab, setActiveTab] = useState('Not Started');
+    const [activeTab, setActiveTab] = useState('All Tasks');
     const [newCardTitle, setNewCardTitle] = useState('');
     const [newCardContent, setNewCardContent] = useState('');
     const [displayDialog, setDisplayDialog] = useState(false);
+    const [startDate, setStartDate] = useState(null);
+    const [dueDate, setDueDate] = useState(null);    
 
     useEffect(() => {
         localStorage.setItem('cards', JSON.stringify(cards));
@@ -79,16 +83,30 @@ export default function Home() {
                 isEditing: false,
                 completed: false,
                 status: 'Not Started',
+                startDate: startDate,
+                dueDate: dueDate
             };
             setCards([...cards, newCard]);
             setNewCardTitle('');
             setNewCardContent('');
+            setStartDate(null);  // Reset start date
+            setDueDate(null);     // Reset due date
             setDisplayDialog(false);
         }
-    };
+    };    
 
     const removeCard = (id) => {
         setCards((prevCards) => prevCards.filter((card) => card.id !== id));
+    };
+
+    const updateCardDate = (field, value, id) => {
+        setCards((prevCards) =>
+            prevCards.map((card) =>
+                card.id === id
+                    ? { ...card, [field]: value }
+                    : card
+            )
+        );
     };
 
     const items = [
@@ -97,27 +115,30 @@ export default function Home() {
         { label: 'Contact', icon: 'pi pi-envelope' }
     ];
 
-    const start = <img alt="logo" src="https://primereact.org/images/logo.png" height="40" />;
+    const start = <img alt="logo" src={Ease_Logo} height="40" />;
     const end = <Button label="Sign Up" icon="pi pi-user" className="p-button-rounded" />;
 
     const tabItems = [
-        { label: 'Not Started', icon: 'pi pi-list' },
+        { label: 'All Tasks', icon: 'pi pi-list' },
+        { label: 'Not Started', icon: 'pi pi-clock' },
         { label: 'In Progress', icon: 'pi pi-spinner' },
         { label: 'Completed', icon: 'pi pi-check' }
     ];
 
     const notStartedTasks = cards.filter(card => card.status === 'Not Started');
     const inProgressTasks = cards.filter(card => card.status === 'In Progress');
-    const completedTasks = cards.filter(card => card.status === 'Completed'); // Change this line
+    const completedTasks = cards.filter(card => card.status === 'Completed');
+
+    // Combine all tasks, prioritizing Not Started and In Progress
+    const allTasks = [...notStartedTasks, ...inProgressTasks, ...completedTasks];
 
     return (
         <div className="App">
             <Menubar model={items} start={start} end={end} />
 
             <div className="hero" style={{ textAlign: 'center', marginTop: '20px' }}>
-                <h1>Welcome to PrimeReact</h1>
-                <p>Build beautiful, performant UI with PrimeReact components.</p>
-                <Button label="Submit" />
+                <h1>Welcome to EASE</h1>
+                <p>Ease the weight of tasks off your shoulders</p>
             </div>
 
             <TabMenu
@@ -129,7 +150,27 @@ export default function Home() {
 
             <div style={{ maxWidth: '1200px', margin: '0 auto', marginTop: '20px', display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
                 {/* Render cards based on the active tab */}
-                {activeTab === 'Not Started' && notStartedTasks.length > 0 ? (
+                {activeTab === 'All Tasks' ? (
+                    allTasks.length > 0 ? (
+                        allTasks.map((card) => (
+                            <div key={card.id} style={{ margin: '10px' }}>
+                                <Card
+                                    card={card}
+                                    onEditToggle={() => toggleEdit(card.id)}
+                                    onSave={() => saveCard(card.id)}
+                                    onCancel={() => toggleEdit(card.id)}
+                                    onContentChange={(field, value) => updateCardContent(card.id, field, value)}
+                                    onDateChange={updateCardDate}  // Pass the date change handler
+                                    onMarkComplete={() => toggleCompleted(card.id)}
+                                    onStatusChange={changeCardStatus}
+                                    onRemove={() => removeCard(card.id)}
+                                />
+                            </div>
+                        ))
+                    ) : (
+                        <p>No tasks available.</p>
+                    )
+                ) : activeTab === 'Not Started' && notStartedTasks.length > 0 ? (
                     notStartedTasks.map((card) => (
                         <div key={card.id} style={{ margin: '10px' }}>
                             <Card
@@ -204,24 +245,45 @@ export default function Home() {
 
             {/* Dialog for Adding Card */}
             <Dialog header="Add New Card" visible={displayDialog} onHide={() => setDisplayDialog(false)}>
-                <div>
-                    <input
-                        type="text"
-                        placeholder="Card Title"
-                        value={newCardTitle}
-                        onChange={(e) => setNewCardTitle(e.target.value)}
-                        style={{ width: '100%', marginBottom: '10px' }}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Card Content"
-                        value={newCardContent}
-                        onChange={(e) => setNewCardContent(e.target.value)}
-                        style={{ width: '100%' }}
+            <div>
+                <input
+                    type="text"
+                    placeholder="Card Title"
+                    value={newCardTitle}
+                    onChange={(e) => setNewCardTitle(e.target.value)}
+                />
+                <textarea
+                    placeholder="Card Content"
+                    value={newCardContent}
+                    onChange={(e) => setNewCardContent(e.target.value)}
+                />
+                
+                {/* Start Date Calendar */}
+                <div style={{ marginTop: '20px' }}>
+                    <label htmlFor="startDate">Start Date:</label>
+                    <Calendar
+                        id="startDate"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.value)}
+                        showIcon
                     />
                 </div>
-                <Button label="Add Card" onClick={addCard} style={{ marginTop: '10px' }} />
-            </Dialog>
+                
+                {/* Due Date Calendar */}
+                <div style={{ marginTop: '20px' }}>
+                    <label htmlFor="dueDate">Due Date:</label>
+                    <Calendar
+                        id="dueDate"
+                        value={dueDate}
+                        onChange={(e) => setDueDate(e.value)}
+                        showIcon
+                    />
+                </div>
+            </div>
+            <div style={{ marginTop: '20px' }}>
+                <Button label="Add Card" onClick={addCard} />
+            </div>
+        </Dialog>
         </div>
     );
 }
