@@ -55,7 +55,7 @@ class TaskDataset(Dataset):
       }
 
 # Training Loop
-def train_model(model, loader, optimizer, loss_fn, epochs=5):
+def train_model(model, loader, optimizer, loss_fn, epochs=20):
    device = torch.device('cpu')
    model = model.to(device)
    loss_fn = loss_fn.to(device)

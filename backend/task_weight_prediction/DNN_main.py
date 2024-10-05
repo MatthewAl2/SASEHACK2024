@@ -43,7 +43,7 @@ loss_fn = nn.MSELoss()
 
 # Train the model
 print('Training model...')
-train_model(model, train_loader, optimizer, loss_fn, epochs=1)
+train_model(model, train_loader, optimizer, loss_fn, epochs=30)
 
 # Call the evaluation function
 

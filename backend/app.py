@@ -174,9 +174,31 @@ def create_user():
 @app.route('/users/<user_id>/tasks', methods=['POST'])
 def create_task(user_id):
    data = request.json
+   task_description = data['description']
+
+     # Tokenize the input text
+   encoding = tokenizer.encode_plus(
+        task_description,
+        add_special_tokens=True,
+        max_length=max_len,
+        padding='max_length',
+        return_attention_mask=True,
+        return_tensors='pt',
+        truncation=True
+    )
+
+   input_ids = encoding['input_ids']
+   attention_mask = encoding['attention_mask']
+
+    # Make prediction using the model
+   with torch.no_grad():
+        output = model(input_ids=input_ids, attention_mask=attention_mask)
+        predicted_weight = output.item()  # Get the predicted task weight
+
+   
    task = Task(
       name=data['name'],
-      weight=data['weight'],
+      weight= predicted_weight,
       start_date=datetime.strptime(data['start_date'], '%Y-%m-%d %H:%M:%S'),
       end_date=datetime.strptime(data['end_date'], '%Y-%m-%d %H:%M:%S'),
       state=data['state'],
@@ -185,6 +207,8 @@ def create_task(user_id):
       user_id=user_id,
       daily_task=data['daily_task']
    )
+    
+   
 
 
    user = User.query.get(user_id)
