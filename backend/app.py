@@ -123,6 +123,7 @@ def format_all(user):
    return {
       "id": user.id,
       "username": user.username,
+      "password": user.password
    }
 
 def format_password(user):
