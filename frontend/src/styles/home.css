@@ -1,4 +1,4 @@
-.home-background {
-    background-color: #eda6a0;
-    min-height: 100vh; /* Ensure it covers the full height of the viewport */
+* {
+    font-family: 'Libre Baskerville', sans-serif; /* Replace 'Serot' with the correct font name */
 }
+  

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'primereact/button';
 import { TabMenu } from 'primereact/tabmenu';
-import Card from './card';
+import Card from '../components/card';
 import { Dialog } from 'primereact/dialog';
-import Navbar from './navbar';
+import Navbar from '../components/navbar';
 import { Calendar } from 'primereact/calendar';
+import DailyCard from '../components/dailycard'; // Import the DailyCard component
 import '../styles/home.css'; // Import the CSS file for styles
 import { userGlobalID } from '../pages/loginPage';
 import axios from 'axios';
@@ -12,6 +13,13 @@ import { ProgressBar } from 'primereact/progressbar';
 
 export default function Home() {
     const initialCards = [];
+    const initialDailyChallenges = [
+        { id: 1, title: "Drink 2 liters of water", content: "Stay hydrated!", completed: false },
+        { id: 2, title: "30 minutes of exercise", content: "Get moving!", completed: false },
+        { id: 2, title: "Meal prep", content: "Cook something!", completed: false },
+
+        // Add more daily challenges as needed
+    ];
 
     // User information
     const [data, setData] = useState([]);
@@ -60,6 +68,7 @@ export default function Home() {
         return savedCards ? JSON.parse(savedCards) : initialCards;
     };
 
+    const [dailyChallenges, setDailyChallenges] = useState(initialDailyChallenges);
     const [cards, setCards] = useState(loadCards);
     const [activeTab, setActiveTab] = useState('All Tasks');
     const [newCardTitle, setNewCardTitle] = useState('');
@@ -71,6 +80,7 @@ export default function Home() {
     useEffect(() => {
         localStorage.setItem('cards', JSON.stringify(cards));
     }, [cards]);
+
 
     const toggleEdit = (id) => {
         setCards((prevCards) =>
@@ -95,6 +105,15 @@ export default function Home() {
             )
         );
     };
+
+        // Functions to handle daily challenges
+        const toggleDailyChallengeCompleted = (id) => {
+            setDailyChallenges(prevChallenges =>
+                prevChallenges.map(challenge =>
+                    challenge.id === id ? { ...challenge, completed: !challenge.completed } : challenge
+                )
+            );
+        };
 
     const toggleCompleted = (id) => {
         setCards((prevCards) =>
@@ -188,6 +207,32 @@ export default function Home() {
                 onTabChange={(e) => setActiveTab(e.value.label)}
                 style={{ marginTop: '20px', maxWidth: '950px', margin: '0 auto' }}
             />
+
+            <div style={{ margin: '20px 0', textAlign: 'center' }}>
+                <h2>Wellness Dailys</h2>
+                <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+                    {dailyChallenges.map((challenge) => (
+                        <div key={challenge.id} style={{ margin: '10px' }}>
+                            <DailyCard
+                                card={challenge}
+                                onMarkComplete={() => toggleDailyChallengeCompleted(challenge.id)}
+                            />
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div style={{ 
+    width: '100%', 
+    maxWidth: '950px',  // Same maxWidth as TabMenu
+    borderTop: '1px solid #ccc',  // Style for the divider line
+    margin: '20px auto'  // Center it
+}} />
+
+            {/* New header for your tasks */}
+            <div style={{ textAlign: 'center', margin: '20px 0' }}>
+                <h2>Your Tasks</h2>
+            </div>
 
             <div style={{ maxWidth: '1200px', margin: '0 auto', marginTop: '20px', display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
                 {activeTab === 'All Tasks' ? (
