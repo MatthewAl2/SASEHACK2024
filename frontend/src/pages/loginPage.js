@@ -1,15 +1,63 @@
 import React, { useState, useEffect, useContext} from 'react';
 import Navbar from '../components/navbar';
-import ImageGallery from '../components/gallery';
 import { InputText } from 'primereact/inputtext';
 import axios from 'axios';
 import { Button } from 'primereact/button';
 import { useNavigate } from 'react-router-dom';
+import { Galleria } from 'primereact/galleria';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css'; 
+import '../components/customGalleria.css';
 
 
 let userGlobalID = null;
 
 export default function LoginPage() {
+
+
+   const galleria4 = '../images/galleria4.jpg';
+   const galleria5 = '../images/galleria5.jpg';    
+   const galleria6 = '../images/galleria6.jpg';
+   const galleria7 = '../images/galleria7.jpg';
+
+   const images = [
+      galleria4,
+      galleria5,
+      galleria6,
+      galleria7
+  ];
+
+  const itemTemplate = (item) => {
+      console.log(item)
+      console.log(item[1])
+      console.log(item[1].itemImageSrc)
+      return (
+         <img
+            src={item}
+            alt={item}
+            style={{
+            width: '100%',
+            height: '250px',
+            borderRadius: '3px'}}/>
+         );
+   };
+
+
+   const thumbnailTemplate = (item) => {
+      return (
+          <img
+              src={item}
+              alt={item}
+              style={{
+                  height: '30px',
+                  borderRadius: '5px',
+              }}
+          />
+      );
+  };
+
+
+   
     // Define styles as JS objects
     const styles = {
         loginPage: {
@@ -112,7 +160,7 @@ export default function LoginPage() {
          <div style={styles.loginPage}>
                <div style={styles.loginContainer}>
                   <div style={styles.galleryContainer}>
-                     <ImageGallery />
+                     <Galleria value={images} item={itemTemplate} thumbnail={thumbnailTemplate} numVisible={3} circular autoPlay transitionInterval={2000} showThumbnails={true} className ="custom-galleria" style={{ width: '400px', margin: '0 auto' }}/>
                   </div>
                   <div style={styles.loginForm}>
                      <div style={styles.formGroup}>
