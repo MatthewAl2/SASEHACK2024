@@ -115,7 +115,7 @@ def format_user(user):
       "xp": user.xp,
       "tags": user.tags,
       "created_by": user.created_by,
-      "tasklist": [format_task_user(task) for task in user.tasklist],
+      "tasklist": [format_task(task) for task in user.tasklist],
       "pomodoro": user.pomodoro
    }
 
@@ -248,6 +248,9 @@ def get_users():
 @app.route('/users/<user_id>/', methods=['GET'])
 def get_user(user_id):
    user = User.query.get(user_id)
+   print(user.xp)
+   print(user.level)
+
    return jsonify([format_user(user)])
 
 # Get one users

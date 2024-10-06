@@ -8,6 +8,7 @@ import { ProgressBar } from 'primereact/progressbar';
 import { Card } from 'primereact/card';
 import { InputText } from 'primereact/inputtext';
 import Navbar from '../components/navbar';
+import { userGlobalID } from '../pages/loginPage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faTwitter, faInstagram, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
@@ -15,6 +16,7 @@ export function ProfilePage() {
     const easeLogo = "../images/Ease Logo.png";
     const solidBlackImage = "../images/Solid_black.png"; // Fixed path
     const defaultImage = "../images/default.png";
+
 
     const [username, setUsername] = useState("USER NAME");
     const [pomodoroValue, setPomodoroValue] = useState(5);
@@ -29,6 +31,16 @@ export function ProfilePage() {
     const [phone, setPhone] = useState("123-456-7890");
     const [address, setAddress] = useState("123 Main St, City, State");
     const [isEditing, setIsEditing] = useState(false);
+
+    // Function to check if user is logged in
+    const userLoggedIn = () => {
+        if (userGlobalID === -1) {
+            return false;
+        } 
+        else {
+            return true
+        }
+    }
 
     // New states for social media links
     const [facebook, setFacebook] = useState("");
@@ -78,6 +90,7 @@ export function ProfilePage() {
             if (storedLinkedin) setLinkedin(storedLinkedin);
         }, []);
 
+
     // Function to increase progress
     const increaseProgress = () => {
         if (progress < 100) {
@@ -118,8 +131,8 @@ export function ProfilePage() {
         }, [fullName, email, phone, address, facebook, twitter, instagram, linkedin]);
 
     return (
-        <div className="App">
-            <Navbar />
+        <div className="App" >
+                <Navbar userLoggedIn={userLoggedIn}/>
 
             {/* Level and ProgressBar */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%', marginTop: '10px' }}>
