@@ -6,6 +6,9 @@ import { InputNumber } from 'primereact/inputnumber';
 import { Avatar } from 'primereact/avatar';
 import { Skeleton } from 'primereact/skeleton';
 import { useEffect } from 'react';
+import { Divider } from 'primereact/divider';
+import { ProgressBar } from 'primereact/progressbar';
+import { Card } from 'primereact/card';
 const showerPath = "images\shower.jpg"
 const space = "       "
 
@@ -22,6 +25,8 @@ function Home() {
     const [username, setUsername] = useState("USER NAME");
     const [pomodoroValue, setValue] = useState(5);
     const [pomodoroChecked, setChecked] = useState(false);
+    const [progress, setProgress] = useState(50)
+    const [level, setLevel] = useState(1)
 
     const achievements =[
         {title: 'Achievement 1', description: 'This is your first achievment!', unlocked:true},
@@ -39,7 +44,8 @@ function Home() {
         if (parentContainer) {
             parentContainer.style.display = 'flex';
             parentContainer.style.justifyContent = 'center'; // Center horizontally
-            parentContainer.style.alignItems = 'center';          // Full height of the viewport
+            parentContainer.style.alignItems = 'center';  
+            parentContainer.style.marginTop = "0px"        // Full height of the viewport
         }
     }, []);
 
@@ -47,22 +53,32 @@ function Home() {
         <div className="App">
             {/* Navbar */}
             <Menubar model={items} start={start} end={end} />
-            <div className="User name"> 
-                <h1>Profile</h1>
-                <p>Username: {username}</p>
-                <Button label = "Change Name"/>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%' }}>
+                <p style={{ margin: 0 }}>Level {level}</p>
+                <ProgressBar value={progress} style={{ flex: 1, marginBottom: "0px, "}} />
+            </div>
+
+            <h1>Profile</h1>
+            <Divider />
+            <div className="User name" style={{margin:'10px'}}> 
+                <p style={{marginBottom: '5px'}}>Username: {username}</p>
+                <Button label = "Change Name" style={{marginTop: '0px', marginBottom: '20px', margin:'10px'}}/>
                 
                 
             </div>
-            <div className="Pomodoro"> 
-                Pomodoro
-                <InputSwitch checked={pomodoroChecked} onChange={(e) => setChecked(e.value)} />
+            <div className="Pomodoro" style={{margin:'10px'}}> 
+                <p style={{ display: 'flex', alignItems: 'center', marginBottom:'5px'}}>
+                    Pomodoro
+                    <InputSwitch checked={pomodoroChecked} onChange={(e) => setChecked(e.value)} style={{ marginLeft: '10px' }} />
+                </p>
                 <InputNumber value={pomodoroValue} onValueChange={(e) => setValue(e.value)} showButtons buttonLayout="horizontal"
-                incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" step={1} min={0} max={60} disabled={!pomodoroChecked} />
+                incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" step={1} min={0} max={60} disabled={!pomodoroChecked} style={{margin:'10px', marginTop: '0px'}} />
             </div>
             
 
             <h1>Achievements</h1>
+            <Divider />
             <div className="parent-container" style={{ width: '100vw', height: '100vh' }}>
                 <div className="achievment-window" style = {{
                     alignContent: 'center',
@@ -73,8 +89,8 @@ function Home() {
                     border: '2px solid #007bff',
                     borderRadius: '20px',
                     boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
-                    overflow: 'hidden',
                     boxSizing: 'border-box', 
+                    marginTop: '0px'
                     
                 }}>
                     
@@ -85,7 +101,7 @@ function Home() {
                         listStyle: 'none'
                     }}>
                         {achievements.map((item, index) => (
-                            <li className="achievement item" style={{
+                            <Card className="achievement item" style={{
                                 marginBottom: '0.5rem',
                                 backgroundColor: '#a2d9a1', 
                                 border: '4px solid #007bff',    
@@ -124,7 +140,7 @@ function Home() {
                                         
                                     )}
                                 </div>
-                            </li> 
+                            </Card> 
                         ))}
                     </ul>
                 </div>
