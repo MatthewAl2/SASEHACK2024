@@ -1,215 +1,281 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from 'primereact/button';
 import { InputSwitch } from 'primereact/inputswitch';
 import { InputNumber } from 'primereact/inputnumber';
 import { Avatar } from 'primereact/avatar';
 import { Skeleton } from 'primereact/skeleton';
-import { useEffect } from 'react';
 import { ProgressBar } from 'primereact/progressbar';
 import { Card } from 'primereact/card';
-import { InputText } from 'primereact/inputtext'
+import { InputText } from 'primereact/inputtext';
 import Navbar from '../components/navbar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebook, faTwitter, faInstagram, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
 export function ProfilePage() {
     const easeLogo = "../images/Ease Logo.png";
-    const profileImage = "../images/Profile_image.png";
-    const solidBlackImage = "..images/Solid_black.png";
-    const defaultImage = "..images/default.png";
+    const solidBlackImage = "../images/Solid_black.png"; // Fixed path
+    const defaultImage = "../images/default.png";
 
     const [username, setUsername] = useState("USER NAME");
-    const [pomodoroValue, setValue] = useState(5);
-    const [pomodoroChecked, setChecked] = useState(false);
-    const [progress, setProgress] = useState(50)
-    const [level, setLevel] = useState(1)
+    const [pomodoroValue, setPomodoroValue] = useState(5);
+    const [pomodoroChecked, setPomodoroChecked] = useState(false);
+    const [progress, setProgress] = useState(50);
+    const [level, setLevel] = useState(1);
+    const [profileImage, setProfileImage] = useState("../images/profile.jpg"); // Added state for profile image
 
+    // New states for personal information
+    const [fullName, setFullName] = useState("John Doe");
+    const [email, setEmail] = useState("john.doe@example.com");
+    const [phone, setPhone] = useState("123-456-7890");
+    const [address, setAddress] = useState("123 Main St, City, State");
+    const [isEditing, setIsEditing] = useState(false);
 
-    const achievements =[
-        {title: 'Welcome to EASE', description: 'You made a account!', unlocked:true, imagesrc:easeLogo },
-        {title: 'Establishing yourself', description: 'You edited your profile!', unlocked:true, imagesrc:profileImage},
-        {title: 'Getting it done', description: 'You completed a task!', unlocked:true, imagesrc:defaultImage},
-        {title: 'Level Up!', description: 'You leveled up!', unlocked:true, imagesrc:defaultImage},
-        {title: 'Achievement 5', description: 'This is hard', unlocked:false, imagesrc:defaultImage},
-        {title: 'Achievement 6', description: '6th achievment', unlocked:false, imagesrc:defaultImage},
-        {title: 'Achievement 7', description: 'Testing!', unlocked:false, imagesrc:defaultImage},
-        {title: 'Achievement 8', description: 'Final Test Achievment!', unlocked:false, imagesrc:defaultImage},
+    // New states for social media links
+    const [facebook, setFacebook] = useState("");
+    const [twitter, setTwitter] = useState("");
+    const [instagram, setInstagram] = useState("");
+    const [linkedin, setLinkedin] = useState("");
+
+    const achievements = [
+        { title: 'Welcome to EASE', description: 'You made an account!', unlocked: true, imagesrc: easeLogo },
+        { title: 'Establishing yourself', description: 'You edited your profile!', unlocked: true, imagesrc: profileImage },
+        { title: 'Getting it done', description: 'You completed a task!', unlocked: true, imagesrc: defaultImage },
+        { title: 'Level Up!', description: 'You leveled up!', unlocked: true, imagesrc: defaultImage },
+        { title: 'Achievement 5', description: 'This is hard', unlocked: false, imagesrc: defaultImage },
+        { title: 'Achievement 6', description: '6th achievement', unlocked: false, imagesrc: defaultImage },
+        { title: 'Achievement 7', description: 'Testing!', unlocked: false, imagesrc: defaultImage },
+        { title: 'Achievement 8', description: 'Final Test Achievement!', unlocked: false, imagesrc: defaultImage },
     ];
 
     useEffect(() => {
         const parentContainer = document.querySelector('.parent-container');
         if (parentContainer) {
             parentContainer.style.display = 'flex';
-            parentContainer.style.justifyContent = 'center'; // Center horizontally
-            parentContainer.style.alignItems = 'center';  
-            parentContainer.style.marginTop = "0px"        // Full height of the viewport
+            parentContainer.style.justifyContent = 'center';
+            parentContainer.style.alignItems = 'center';
+            parentContainer.style.marginTop = "0px";
         }
     }, []);
 
-        // Function to increase progress
-        const increaseProgress = () => {
-            // Increase progress by 10%
-            if (progress < 100) {
-                setProgress(prevProgress => {
-                    const newProgress = prevProgress + 10;
-                    // Level up if progress reaches 100
-                    if (newProgress >= 100) {
-                        setLevel(level + 1);
-                        return 0; // Reset progress after leveling up
-                    }
-                    return newProgress;
-                });
-            }
-        };
+    // Function to increase progress
+    const increaseProgress = () => {
+        if (progress < 100) {
+            setProgress(prevProgress => {
+                const newProgress = prevProgress + 10;
+                if (newProgress >= 100) {
+                    setLevel(level + 1);
+                    return 0; // Reset progress after leveling up
+                }
+                return newProgress;
+            });
+        }
+    };
+
+    // Handle file change for profile picture
+    const handleProfilePictureChange = (event) => {
+        const file = event.target.files[0];
+        console.log(file); // Check if the file input is working
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setProfileImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     return (
-        <div className="App" >
-            <Navbar/>
+        <div className="App">
+            <Navbar />
 
+            {/* Level and ProgressBar */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%', marginTop: '10px' }}>
-                <p style={{ margin: 0, marginBottom: '0px'}}>Level {level}</p>
-                <ProgressBar value={progress} style={{ flex: 1, marginBottom: '0px', maxWidth:'1430px'}} />
+                <p style={{ margin: 0 }}>Level {level}</p>
+                <ProgressBar value={progress} style={{ flex: 1, maxWidth: '1430px' }} />
             </div>
 
-
-
-            <h1 style={{marginBottom:'0px'}}>Profile</h1>
+            {/* Profile Section */}
+            <h1>Profile</h1>
             <div style={{
-    display: 'flex',        // Use flexbox for alignment
-    justifyContent: 'flex-end',  // Move the line to the right
-    width: '100%',          // Full width
-    maxWidth: '1000px',     // Max width constraint
-    margin: '0 auto',       // Center the container horizontally
-    borderTop: '1px solid #ccc'  // Style for the divider line
-}} />
+                display: 'flex',
+                justifyContent: 'flex-end',
+                width: '100%',
+                maxWidth: '1000px',
+                margin: '0 auto',
+                borderTop: '1px solid #ccc'
+            }} />
 
-        
-                <div style={{ display: 'flex', gap: '150px', marginTop: '10px' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                        <Card style={{border: '2px solid #00b4d8',borderRadius: '8px', marginLeft: '20px', marginTop: '0px', maxWidth: '230px'}}>
-                            <div style={{ margin: '0px' }}>
-                                <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: '0px', marginTop: '0px'}}>
-                                    <i className="pi pi-user" style={{ marginRight: '10px', marginTop: '0px' }}></i>
-                                    <p style={{ marginBottom: '0', marginTop: '0px' }}>Username: {username}</p>
-                                </div>
-                            </div>
-                            </Card>
-
-
-
-                        <Card style={{border: '2px solid #00b4d8',borderRadius: '8px', marginLeft: '20px', marginTop: '10px',maxWidth: '400px' }}>
-                            <div className="Pomodoro" style={{margin:'10px'}}> 
-                                <p style={{ display: 'flex', alignItems: 'center', marginBottom:'5px'}}>
-                                    <i className="pi pi-hourglass" style={{ marginRight: '10px', marginTop: '0' }}></i>
-                                    Pomodoro
-                                    <InputSwitch checked={pomodoroChecked} onChange={(e) => setChecked(e.value)} style={{ marginLeft: '10px' }} />
-                                </p>
-                                <InputNumber value={pomodoroValue} onValueChange={(e) => setValue(e.value)} showButtons buttonLayout="horizontal"
-                                incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" step={1} min={0} max={60} disabled={!pomodoroChecked} style={{marginLeft: '15px', marginTop: '0px'}} />
-                            </div>
-                        </Card>
-                    </div>
-                
-                    <Card style={{border: '4px solid #00b4d8',borderRadius: '8px', marginLeft: '20px', marginTop: '0px', width: '300px', height: '400px'}}>
-                        <div style={{marginLeft: '0px', marginTop: '20px', maxWidth: '300px', justifyContent: 'center', alignItems: 'center' }}>  
-                            <Avatar image={profileImage} className="mr-2" shape='circle' style={{ width: '8rem', height: '8rem', borderRadius: '50%', border: '4px solid #00b4d8', padding: '0.2rem', marginLeft: '70px' }} ></Avatar>
-                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <i className="pi pi-user" style={{ marginRight: '10px', marginTop: '0px' }}></i>
-                                    <p style={{ marginBottom: '0', marginTop: '0px' }}>{username}</p>
-                                </div>
-                            </div>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                <Card style={{ border: '2px solid #00b4d8', borderRadius: '8px', width: '300px', height: '360px' }}>
+                    <div style={{ textAlign: 'center' }}>
+                        <div style={{ position: 'relative', width: '8rem', height: '8rem', margin: '0 auto' }}>
+                            {/* Avatar with embedded profile icon */}
+                            <Avatar image={profileImage} shape="circle" style={{ width: '8rem', height: '8rem', border: '4px solid #00b4d8' }}>
+                            </Avatar>
                         </div>
-                        <Button label="Change Profile Picture" style={{ marginTop: '10px', marginBottom: '10px', marginLeft:'30px'}} />
-                        <InputText value={username} onChange={(e) => setUsername(e.target.value)} style={{ marginTop: '5px', marginBottom: '5px', marginLeft:'20px'}}/>
-                        <Button label="Change Name" style={{ flexShrink: 0, marginTop: '0px', marginBottom: '10px', whiteSpace: 'nowrap', marginLeft: '55px' }} />
+                        <p>{username}</p>
+                        {/* File input for changing profile picture */}
+                        <input type="file" accept="image/*" onChange={handleProfilePictureChange} style={{ display: 'none' }} id="profilePicInput" />
+                        <label htmlFor="profilePicInput">
+                            <Button label="Upload New Picture" type="button" />
+                        </label>
+                        <InputText value={username} onChange={(e) => setUsername(e.target.value)} style={{ marginBottom: '10px' }} />
+                        <Button label="Change Name" />
+                    </div>
+                </Card>
 
-                    </Card>
-                </div>
+                {/* New Personal Information Card */}
+                <Card style={{ border: '2px solid #00b4d8', borderRadius: '8px', maxWidth: '400px', height: '360px', marginLeft: '50px' }}>
+                    <div style={{ padding: '10px' }}>
+                        <h3>Personal Information</h3>
+                        <InputText 
+                            value={fullName} 
+                            onChange={(e) => setFullName(e.target.value)} 
+                            disabled={!isEditing} 
+                            placeholder="Full Name" 
+                            style={{ marginBottom: '10px' }} 
+                        />
+                        <InputText 
+                            value={email} 
+                            onChange={(e) => setEmail(e.target.value)} 
+                            disabled={!isEditing} 
+                            placeholder="Email" 
+                            style={{ marginBottom: '10px' }} 
+                        />
+                        <InputText 
+                            value={phone} 
+                            onChange={(e) => setPhone(e.target.value)} 
+                            disabled={!isEditing} 
+                            placeholder="Phone" 
+                            style={{ marginBottom: '10px' }} 
+                        />
+                        <InputText 
+                            value={address} 
+                            onChange={(e) => setAddress(e.target.value)} 
+                            disabled={!isEditing} 
+                            placeholder="Address" 
+                            style={{ marginBottom: '10px' }} 
+                        />
+                        <div>
+                        {/* Move the button here */}
+                        <Button 
+                            label={isEditing ? "Save Changes" : "Edit"} 
+                            onClick={() => {
+                                if (isEditing) {
+                                    // Save changes logic can go here
+                                }
+                                setIsEditing(!isEditing); 
+                            }} 
+                            style={{ marginTop: '10px' }} // Optional: add some margin for spacing
+                        />
+                        </div>
+                    </div>
+                </Card>
+            </div>
 
-                            {/* Button to simulate task completion and increase progress */}
+                {/* Social Media Links Card */}
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                <Card style={{ border: '2px solid #00b4d8', borderRadius: '8px', maxWidth: '400px', height: '360px' }}>
+                    <div style={{ padding: '10px' }}>
+                        <h3>Social Media Links</h3>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                            <FontAwesomeIcon icon={faFacebook} style={{ marginRight: '8px', color: '#3b5998' }} />
+                            <InputText 
+                                value={facebook} 
+                                onChange={(e) => setFacebook(e.target.value)} 
+                                placeholder="Facebook URL" 
+                            />
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                            <FontAwesomeIcon icon={faTwitter} style={{ marginRight: '8px', color: '#1DA1F2' }} />
+                            <InputText 
+                                value={twitter} 
+                                onChange={(e) => setTwitter(e.target.value)} 
+                                placeholder="Twitter URL" 
+                            />
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                            <FontAwesomeIcon icon={faInstagram} style={{ marginRight: '8px', color: '#C13584' }} />
+                            <InputText 
+                                value={instagram} 
+                                onChange={(e) => setInstagram(e.target.value)} 
+                                placeholder="Instagram URL" 
+                            />
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                            <FontAwesomeIcon icon={faLinkedin} style={{ marginRight: '8px', color: '#0077B5' }} />
+                            <InputText 
+                                value={linkedin} 
+                                onChange={(e) => setLinkedin(e.target.value)} 
+                                placeholder="LinkedIn URL" 
+                            />
+                        </div>
+                    </div>
+                </Card>
+
+
+                {/* Pomodoro Section */}
+                <Card style={{ border: '2px solid #00b4d8', borderRadius: '8px', maxWidth: '400px', marginLeft: '50px' }}>
+                    <div style={{ padding: '10px' }}>
+                        <p style={{ display: 'flex', alignItems: 'center' }}>
+                            <i className="pi pi-hourglass" style={{ marginRight: '10px' }}></i>
+                            Pomodoro
+                            <InputSwitch checked={pomodoroChecked} onChange={(e) => setPomodoroChecked(e.value)} style={{ marginLeft: '10px' }} />
+                        </p>
+                        <InputNumber value={pomodoroValue} onValueChange={(e) => setPomodoroValue(e.value)} showButtons
+                            buttonLayout="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
+                            step={1} min={0} max={60} disabled={!pomodoroChecked} />
+                    </div>
+                </Card>
+            </div>
+
+            {/* Task Completion Button */}
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
                 <Button label="Complete Task" icon="pi pi-check" onClick={increaseProgress} />
             </div>
-            
+
+            {/* Achievements Section */}
             <h1>Achievements</h1>
-            <div style={{
-    display: 'flex',        // Use flexbox for alignment
-    justifyContent: 'flex-end',  // Move the line to the right
-    width: '100%',          // Full width
-    maxWidth: '1000px',     // Max width constraint
-    margin: '0 auto',       // Center the container horizontally
-    borderTop: '1px solid #ccc'  // Style for the divider line
-}} />
+            <div style={{ borderTop: '1px solid #ccc', maxWidth: '1000px', margin: '0 auto' }} />
 
             <div className="parent-container" style={{ width: '100vw', height: '100vh' }}>
                 <div className="achievment-window" style={{
-                    alignContent: 'center',
-                    maxHeight: '500px',
-                    overflowY: 'auto', 
-                    width: '80rem',
-                    margin: '250px',  // Adjust this margin to reduce space
-                    border: '2px solid #00b4d8',
-                    borderRadius: '20px',
-                    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
-                    boxSizing: 'border-box',
-                    marginTop: '0px'
+                    maxHeight: '500px', overflowY: 'auto', width: '80rem', border: '2px solid #00b4d8', borderRadius: '20px',
+                    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)', marginTop: '20px'
                 }}>
-                    
-                    <ul className="grid" style={{
-                        display: 'grid', 
-                        gridTemplateColumns: 'repeat(2, 1fr)',  
-                        gap: '1rem',
-                        listStyle: 'none'
-                    }}>
+                    <ul className="grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', listStyle: 'none' }}>
                         {achievements.map((item, index) => (
-                            <Card className="achievement item" style={{
-                                marginBottom: '0.5rem',
-                                backgroundColor: '#a2d9a1', 
-                                border: '2px solid #00b4d8',    
-                                borderRadius: '8px',        
-                                padding: '1rem', 
-                                marginRight: '20px',  
-                                marginLeft: '-20px'
-                                }}>
-                                <div className="flex" style={{ alignItems: 'center'}}>
+                            <Card className="achievement-item" key={index} style={{
+                                backgroundColor: '#a2d9a1', border: '2px solid #00b4d8', borderRadius: '8px', padding: '1rem'
+                            }}>
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
                                     {item.unlocked ? (
-                                        <> 
-                                            <Avatar image={item.imagesrc} className="mr-2" shape='circle' style={{width: '4rem', height: '4rem', borderRadius: '50%', border: '2px solid #efda6b', padding: '0.2rem', }}/>
-                                            <div style={{ flex: '1', marginLeft: '0,5rem' }}>
-                                                <h4 style={{ margin: '0 0 0.2rem 0', fontSize: '1rem' }}>{item.title}</h4> 
-                                                <p style={{ margin: '0', fontSize: '0.875rem' }}>{item.description}</p> 
-                                            </div>
-                                        </>
-                                    ): (
                                         <>
-                                            <Avatar image={solidBlackImage} className="mr-2" shape='circle' style={{width: '4rem', height: '4rem', borderRadius: '50%', border: '2px solid #FF6961', padding: '0.2rem', }}/>
-                                            <div style={{ flex: '1', marginLeft: '0.5rem' }}>
-                                                <Skeleton width="75%" className="mb-2" style={{
-                                                    backgroundColor: '#003d5d', // Custom background color for text skeleton
-                                                    animationBackgroundColor: '#003d5d', // Custom shimmer color for text
-                                                    animation: 'none'
-                                                }} />
-                                                <Skeleton width="50%" animation= "none" backgroundColorcolor= '#003d5d' style={{
-                                                    backgroundColor: '#003d5d', // Custom background color for text skeleton
-                                                    animationBackgroundColor: '#003d5d', // Custom shimmer color for text
-                                                    animation: 'wave'
-                                                }} />
+                                            <Avatar image={item.imagesrc} shape="circle" style={{
+                                                width: '4rem', height: '4rem', border: '2px solid #efda6b', padding: '0.2rem'
+                                            }} />
+                                            <div style={{ marginLeft: '1rem' }}>
+                                                <h4 style={{ margin: '0 0 0.5rem 0' }}>{item.title}</h4>
+                                                <p style={{ margin: 0 }}>{item.description}</p>
                                             </div>
                                         </>
-                                        
+                                    ) : (
+                                        <>
+                                            <Avatar image={solidBlackImage} shape="circle" style={{
+                                                width: '4rem', height: '4rem', border: '2px solid #FF6961', padding: '0.2rem'
+                                            }} />
+                                            <div style={{ marginLeft: '1rem' }}>
+                                                <Skeleton width="75%" className="mb-2" />
+                                                <Skeleton width="50%" />
+                                            </div>
+                                        </>
                                     )}
                                 </div>
-                            </Card> 
+                            </Card>
                         ))}
                     </ul>
                 </div>
             </div>
-            
-
-            
-            {/* Footer */}
-            <footer className="footer">
-                <p></p>
-            </footer>
         </div>
     );
 }
