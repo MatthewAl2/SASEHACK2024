@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'primereact/button';
-import { Menubar } from 'primereact/menubar';
 import { TabMenu } from 'primereact/tabmenu';
 import Card from './card';
 import { Dialog } from 'primereact/dialog';
+import Navbar from './navbar';
 
 export default function Home() {
     const initialCards = []; // Set initial cards to an empty array
@@ -91,15 +91,6 @@ export default function Home() {
         setCards((prevCards) => prevCards.filter((card) => card.id !== id));
     };
 
-    const items = [
-        { label: 'Home', icon: 'pi pi-home' },
-        { label: 'About', icon: 'pi pi-info-circle' },
-        { label: 'Contact', icon: 'pi pi-envelope' }
-    ];
-
-    const start = <img alt="logo" src="https://primereact.org/images/logo.png" height="40" />;
-    const end = <Button label="Sign Up" icon="pi pi-user" className="p-button-rounded" />;
-
     const tabItems = [
         { label: 'Not Started', icon: 'pi pi-list' },
         { label: 'In Progress', icon: 'pi pi-spinner' },
@@ -111,8 +102,9 @@ export default function Home() {
     const completedTasks = cards.filter(card => card.status === 'Completed'); // Change this line
 
     return (
+
         <div className="App">
-            <Menubar model={items} start={start} end={end} />
+            <Navbar />
 
             <div className="hero" style={{ textAlign: 'center', marginTop: '20px' }}>
                 <h1>Welcome to PrimeReact</h1>
