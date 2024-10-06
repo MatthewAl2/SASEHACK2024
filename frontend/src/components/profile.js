@@ -11,10 +11,9 @@ import { ProgressBar } from 'primereact/progressbar';
 import { Card } from 'primereact/card';
 import Ease_Logo from './Ease Logo.png';
 import Profile_image from './profile.jpg';
-import black from './Solid_black.png'
-const showerPath = "images\shower.jpg"
+import black from './Solid_black.png';
+import defaultImage from "./default.png";
 const space = "       "
-
 
 function Home() {
     const items = [
@@ -24,7 +23,7 @@ function Home() {
 
 
     const start = <img alt="logo" src={Ease_Logo} height="40" />;
-    const end = <Button label={<img src={Profile_image} style={{width: '1.5rem', height: '1.5rem', borderRadius: '50%'  }} />}  className="p-button-rounded" />;
+    const end = <Button  label={<img src={Profile_image} style={{width: '1.5rem', height: '1.5rem', borderRadius: '50%', border: '1px solid black'  }} />}  className="p-button-rounded"  />;
     const [username, setUsername] = useState("USER NAME");
     const [pomodoroValue, setValue] = useState(5);
     const [pomodoroChecked, setChecked] = useState(false);
@@ -33,14 +32,14 @@ function Home() {
 
 
     const achievements =[
-        {title: 'Achievement 1', description: 'This is your first achievment!', unlocked:true},
-        {title: 'Achievement 2', description: 'Keep going!', unlocked:true},
-        {title: 'Achievement 3', description: 'Good job!', unlocked:false},
-        {title: 'Achievement 4', description: 'You did something', unlocked:true},
-        {title: 'Achievement 5', description: 'This is hard', unlocked:false},
-        {title: 'Achievement 6', description: '6th achievment', unlocked:true},
-        {title: 'Achievement 7', description: 'Testing!', unlocked:true},
-        {title: 'Achievement 8', description: 'Final Test Achievment!', unlocked:true},
+        {title: 'Welcome to EASE', description: 'You made a account!', unlocked:true, imagesrc:Ease_Logo },
+        {title: 'Establishing yourself', description: 'You edited your profile!', unlocked:true, imagesrc: Profile_image},
+        {title: 'Getting it done', description: 'You completed a task!', unlocked:true, imagesrc:defaultImage},
+        {title: 'Level Up!', description: 'You leveled up!', unlocked:true, imagesrc:defaultImage},
+        {title: 'Achievement 5', description: 'This is hard', unlocked:false, imagesrc:defaultImage},
+        {title: 'Achievement 6', description: '6th achievment', unlocked:false, imagesrc:defaultImage},
+        {title: 'Achievement 7', description: 'Testing!', unlocked:false, imagesrc:defaultImage},
+        {title: 'Achievement 8', description: 'Final Test Achievment!', unlocked:false, imagesrc:defaultImage},
     ];
 
     useEffect(() => {
@@ -54,7 +53,7 @@ function Home() {
     }, []);
 
     return (
-        <div className="App" style={{backgroundColor: '#eda6a0'}}>
+        <div className="App" >
             {/* Navbar */}
             <Menubar model={items} start={start} end={end} />
 
@@ -63,11 +62,14 @@ function Home() {
                 <ProgressBar value={progress} style={{ flex: 1, marginBottom: '0px', maxWidth:'1430px'}} />
             </div>
 
+
+
             <h1 style={{marginBottom:'0px'}}>Profile</h1>
+            <Divider />
                 
-                <div style={{ display: 'flex', gap: '200px', marginTop: '10px' }}>
+                <div style={{ display: 'flex', gap: '150px', marginTop: '10px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                        <Card style={{border: '4px solid #FFFFFF',borderRadius: '8px', marginLeft: '20px', marginTop: '0px', maxWidth: '300px'}}>
+                        <Card style={{border: '2px solid #00b4d8',borderRadius: '8px', marginLeft: '20px', marginTop: '0px', maxWidth: '230px'}}>
                             <div style={{ margin: '0px' }}>
                                 <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: '0px', marginTop: '0px'}}>
                                     <i className="pi pi-user" style={{ marginRight: '10px', marginTop: '0px' }}></i>
@@ -80,7 +82,7 @@ function Home() {
 
 
 
-                        <Card style={{border: '4px solid #FFFFFF',borderRadius: '8px', marginLeft: '20px', marginTop: '10px',maxWidth: '400px' }}>
+                        <Card style={{border: '2px solid #00b4d8',borderRadius: '8px', marginLeft: '20px', marginTop: '10px',maxWidth: '400px' }}>
                             <div className="Pomodoro" style={{margin:'10px'}}> 
                                 <p style={{ display: 'flex', alignItems: 'center', marginBottom:'5px'}}>
                                     <i className="pi pi-hourglass" style={{ marginRight: '10px', marginTop: '0' }}></i>
@@ -95,13 +97,13 @@ function Home() {
                 
                     
 
-                    <Card style={{border: '4px solid #FFFFFF',borderRadius: '8px', marginLeft: '20px', marginTop: '0px', width: '600px'}}>
+                    <Card style={{border: '4px solid #00b4d8',borderRadius: '8px', marginLeft: '20px', marginTop: '0px', width: '600px', height: '335px'}}>
                         <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: '0px', marginTop: '0px'}}>
                             <i className="pi pi-camera" style={{ marginRight: '10px', marginTop: '0px' }}></i>
                             <p style={{ marginBottom: '0', marginTop: '0px' }}> Current Profile Picture</p>
                         </div>
-                        <Card style={{border: '4px solid #FFFFFF',borderRadius: '8px', marginLeft: '130px', marginTop: '20px', maxWidth: '300px', justifyContent: 'center', alignItems: 'center' }}>  
-                            <Avatar image={Profile_image} className="mr-2" shape='circle' style={{ width: '12rem', height: '12rem', borderRadius: '50%', border: '4px solid #a2d9a1', padding: '0.2rem', marginLeft: '30px' }} ></Avatar>
+                        <Card style={{border: '2px solid #00b4d8',borderRadius: '8px', marginLeft: '130px', marginTop: '20px', maxWidth: '300px', justifyContent: 'center', alignItems: 'center' }}>  
+                            <Avatar image={Profile_image} className="mr-2" shape='circle' style={{ width: '8rem', height: '8rem', borderRadius: '50%', border: '4px solid #00b4d8', padding: '0.2rem', marginLeft: '70px' }} ></Avatar>
                         </Card>
                         <Button label="Change Profile Picture" style={{ marginTop: '10px', marginBottom: '10px', marginLeft:'30px'}} />
                     </Card>
@@ -119,7 +121,7 @@ function Home() {
                     overflowY: 'auto', 
                     width: '80rem',
                     margin: '10px',
-                    border: '2px solid #FFFFFF',
+                    border: '2px solid #00b4d8',
                     borderRadius: '20px',
                     boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
                     boxSizing: 'border-box', 
@@ -137,14 +139,14 @@ function Home() {
                             <Card className="achievement item" style={{
                                 marginBottom: '0.5rem',
                                 backgroundColor: '#a2d9a1', 
-                                border: '4px solid #FFFFFF',    
+                                border: '2px solid #00b4d8',    
                                 borderRadius: '8px',        
                                 padding: '1rem',   
                                 }}>
                                 <div className="flex" style={{ alignItems: 'center'}}>
                                     {item.unlocked ? (
                                         <> 
-                                            <Avatar image="https://primereact.org/images/logo.png" className="mr-2" shape='circle' style={{width: '4rem', height: '4rem', borderRadius: '50%', border: '4px solid #efda6b', padding: '0.2rem', }}/>
+                                            <Avatar image={item.imagesrc} className="mr-2" shape='circle' style={{width: '4rem', height: '4rem', borderRadius: '50%', border: '2px solid #efda6b', padding: '0.2rem', }}/>
                                             <div style={{ flex: '1', marginLeft: '0,5rem' }}>
                                                 <h4 style={{ margin: '0 0 0.2rem 0', fontSize: '1rem' }}>{item.title}</h4> 
                                                 <p style={{ margin: '0', fontSize: '0.875rem' }}>{item.description}</p> 
@@ -152,7 +154,7 @@ function Home() {
                                         </>
                                     ): (
                                         <>
-                                            <Avatar image={black} className="mr-2" shape='circle' style={{width: '4rem', height: '4rem', borderRadius: '50%', border: '4px solid #efda6b', padding: '0.2rem', }}/>
+                                            <Avatar image={black} className="mr-2" shape='circle' style={{width: '4rem', height: '4rem', borderRadius: '50%', border: '2px solid #FF6961', padding: '0.2rem', }}/>
                                             <div style={{ flex: '1', marginLeft: '0.5rem' }}>
                                                 <Skeleton width="75%" className="mb-2" style={{
                                                     backgroundColor: '#003d5d', // Custom background color for text skeleton
