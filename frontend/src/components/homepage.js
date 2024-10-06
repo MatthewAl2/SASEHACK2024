@@ -6,6 +6,7 @@ import Card from './card';
 import { Dialog } from 'primereact/dialog';
 import Ease_Logo from '../images/Ease Logo.png';
 import { Calendar } from 'primereact/calendar';
+import '../styles/home.css'; // Import the CSS file for styles
 
 export default function Home() {
     const initialCards = [];
@@ -22,7 +23,6 @@ export default function Home() {
     const [displayDialog, setDisplayDialog] = useState(false);
     const [startDate, setStartDate] = useState(null);
     const [dueDate, setDueDate] = useState(null);
-    const [taskWeight, setTaskWeight] = useState(1); // Default weight
 
     useEffect(() => {
         localStorage.setItem('cards', JSON.stringify(cards));
@@ -86,14 +86,12 @@ export default function Home() {
                 status: 'Not Started',
                 startDate: startDate,
                 dueDate: dueDate,
-                weight: taskWeight // Add weight to the new card
             };
             setCards([...cards, newCard]);
             setNewCardTitle('');
             setNewCardContent('');
             setStartDate(null);
             setDueDate(null);
-            setTaskWeight(1); // Reset task weight
             setDisplayDialog(false);
         }
     };
@@ -134,7 +132,7 @@ export default function Home() {
     const allTasks = [...notStartedTasks, ...inProgressTasks, ...completedTasks];
 
     return (
-        <div className="App">
+        <div className="App home-background">
             <Menubar model={items} start={start} end={end} />
 
             <div className="hero" style={{ textAlign: 'center', marginTop: '20px' }}>
@@ -289,19 +287,6 @@ export default function Home() {
                             id="dueDate"
                             value={dueDate}
                             onChange={(e) => setDueDate(e.value)}
-                            style={{ width: '100%' }}
-                        />
-                    </div>
-
-                    <div className="p-field" style={{ marginBottom: '1rem' }}>
-                        <label htmlFor="taskWeight">Task Weight (1-25)</label>
-                        <input
-                            type="number"
-                            id="taskWeight"
-                            min="1"
-                            max="25"
-                            value={taskWeight}
-                            onChange={(e) => setTaskWeight(parseInt(e.target.value))}
                             style={{ width: '100%' }}
                         />
                     </div>
