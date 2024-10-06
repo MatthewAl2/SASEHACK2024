@@ -58,7 +58,8 @@ export function ProfilePage() {
 
     return (
         <div className="App" >
-            <Navbar userGlobalID={userLoggedIn}/>
+                <Navbar userLoggedIn={userLoggedIn}/>
+
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%', marginTop: '10px' }}>
                 <p style={{ margin: 0, marginBottom: '0px'}}>Level {level}</p>
