@@ -21,7 +21,7 @@ export default function Navbar(props) {
     const login = userLoggedIn ? (
         <div style={styles.profileContainer}>
             <img 
-                src="../images/profile.png" 
+                src="../images/loggedInUser.jpg" 
                 alt="Profile" 
                 style={styles.profileImage} 
                 onClick={() => navigate('/profile')}
