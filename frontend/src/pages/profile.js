@@ -98,6 +98,7 @@ export function ProfilePage() {
                                 </div>
                             </div>
 
+
                             <Button label="Change Name" style={{ marginTop: '0px', marginBottom: '10px', marginLeft: '30px' }} onClick={handleChangeName} />
                             </Card>
 
