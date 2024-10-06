@@ -11,12 +11,14 @@ import { userGlobalID } from '../pages/loginPage';
 import axios from 'axios';
 import { ProgressBar } from 'primereact/progressbar';
 
+// Global variable to store the user ID
+let globalID = userGlobalID;
 export default function Home() {
     const initialCards = [];
     const initialDailyChallenges = [
         { id: 1, title: "Drink 2 liters of water", content: "Stay hydrated!", completed: false },
         { id: 2, title: "30 minutes of exercise", content: "Get moving!", completed: false },
-        { id: 2, title: "Meal prep", content: "Cook something!", completed: false },
+        { id: 3, title: "Meal prep", content: "Cook something!", completed: false },
 
         // Add more daily challenges as needed
     ];
@@ -41,6 +43,7 @@ export default function Home() {
         fetchData();
     }, [userGlobalID]); // Dependency array includes userGlobalID if it changes
 
+    // Function to format the date for backend
     const formatDate = (date) =>{
         const dateObj = new Date(date);
 
@@ -55,6 +58,24 @@ export default function Home() {
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
 
+    // Fucntion to format date for frontend
+    function formatDateFrontend(formattedDate) {
+        // Split the formatted date into date and time components
+        const [datePart, timePart] = formattedDate.split(' ');
+    
+        // Further split the date and time components
+        const [year, month, day] = datePart.split('-');
+        const [hours, minutes, seconds] = timePart.split(':');
+    
+        // Create a new Date object using the components
+        // Note: Month is zero-indexed in JavaScript Date
+        const dateObj = new Date(Date.UTC(year, month - 1, day, hours, minutes, seconds));
+    
+        // Return the ISO 8601 string
+        return dateObj.toISOString();
+    }
+
+
     const formatState = (state) =>{
         const statusMapping = {
             'Not Started': 0,
@@ -67,7 +88,7 @@ export default function Home() {
         return statusMapping[state];
     }
     
-
+    // Make a task
     const postTaskData = async (newCardTitle, newCardContent, startdateObj, enddateObj) => {
         try {
             // Make the POST request using axios
@@ -84,14 +105,14 @@ export default function Home() {
             });
     
             // Return the response data
-            return response.data.id;
+            return response.data;
         } catch (error) {
             console.error('Error making POST request:', error);
             return null;  // Return null or handle the error appropriately
         }
     };
 
-   
+    // Update a task
     const putTaskData = async (card) => {
         
         try {
@@ -114,13 +135,14 @@ export default function Home() {
                 return null;  // Return null or handle the error appropriately
             }
     };
-
+    
+    // Delete a task
     const deleteData = async (card) => {
         
         try {
             // Make the POST request using axios
-            const id = await card.id
-            const response = await axios.delete('http://127.0.0.1:5000/tasks/' + id, {
+            const ids = await card.id
+            const response = await axios.delete('http://127.0.0.1:5000/tasks/' + ids, {
                 
             });
     
@@ -134,23 +156,23 @@ export default function Home() {
 
     const userXP = data[0]?.xp !== undefined ? data[0].xp : 0;
     const userLevel = data[0]?.level !== undefined ? data[0].level : 0;
+    const totalXPBar = Math.round(200 / (1 + Math.E ** (-0.025 * (userLevel - 1))));
+    const progressBarVal = Math.round((userXP / totalXPBar) * 100);
 
-    const totalXPBar = () => {    
-        // Equation using level
-        const totalXP = 200 / (1 + Math.E ** (-0.025 * (userLevel - 150)));
-        
-        return totalXP;  // Make sure the function returns the calculated value
-    };
-    const userLoggedIn = () => {
-        if (userGlobalID === -1) {
-            return false;
-        } 
-        else {
-            return true
-        }
-    }
+    console.log(userXP);
+    console.log(userLevel);
+    console.log(totalXPBar);
+    
 
 
+    // const userLoggedIn = () => {
+    //     if (userGlobalID === -1) {
+    //         return false;
+    //     } 
+    //     else {
+    //         return true
+    //     }
+    // }
 
 
     const loadCards = () => {
@@ -168,10 +190,29 @@ export default function Home() {
     const [dueDate, setDueDate] = useState(null);
 
     useEffect(() => {
+
+        globalID = data[0]?.id; // Update the global user ID
+
+        data[0]?.tasks?.forEach(task => {
+            const newCard = {
+                id: task.id,
+                title: task.name,
+                content: task.description,
+                isEditing: false,
+                completed: false,
+                status: formatState(task.state),
+                startDate: formatDate(task.start_date),
+                dueDate: formatDateFrontend(task.end_date),
+            };
+            setCards([...cards, newCard]);
+        });
+        
+
         localStorage.setItem('cards', JSON.stringify(cards));
+        
 
 
-    }, [cards]);
+    }, [cards, data]);
 
 
     const toggleEdit = (id) => {
@@ -242,15 +283,16 @@ export default function Home() {
 
     
 
-    const addCard = () => {
+    const  addCard = async () => {
         if (newCardTitle && newCardContent) {
             const startdateObj = formatDate(startDate);
 
             const enddateObj = formatDate(dueDate);
-            const taskId = postTaskData(newCardTitle, newCardContent, startdateObj, enddateObj)
+            const task = await postTaskData(newCardTitle, newCardContent, startdateObj, enddateObj)
             
             const newCard = {
-                id: taskId,
+                id: task.id,
+                weight: task.weight,
                 title: newCardTitle,
                 content: newCardContent,
                 isEditing: false,
@@ -265,6 +307,7 @@ export default function Home() {
             setStartDate(null);
             setDueDate(null);
             setDisplayDialog(false);
+
         }
     };
 
@@ -300,7 +343,7 @@ export default function Home() {
     return (
 
         <div className="App">
-            <Navbar userLoggedIn={userLoggedIn}/>
+            <Navbar userLoggedIn={globalID}/>
         <div className="App home-background">
 
             <div className="hero" style={{ textAlign: 'center', marginTop: '20px' }}>
@@ -309,7 +352,8 @@ export default function Home() {
             </div>
             <div style={{ maxWidth: '950px', margin: '20px auto', textAlign: 'center' }}>
                 <h2>Level {userLevel}</h2>
-                <ProgressBar value={userXP} displayValueTemplate={totalXPBar} color='green'></ProgressBar>
+                <ProgressBar value={progressBarVal}></ProgressBar>
+
             </div>
 
             <TabMenu
