@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'primereact/button';
 import { TabMenu } from 'primereact/tabmenu';
-import Card from './card';
+import Card from '../components/card';
 import { Dialog } from 'primereact/dialog';
-import Navbar from './navbar';
+import Navbar from '../components/navbar';
 import { Calendar } from 'primereact/calendar';
-import DailyCard from './dailycard'; // Import the DailyCard component
+import DailyCard from '../components/dailycard'; // Import the DailyCard component
 import '../styles/home.css'; // Import the CSS file for styles
 
 export default function Home() {

@@ -9,21 +9,22 @@ import { useEffect } from 'react';
 import { Divider } from 'primereact/divider';
 import { ProgressBar } from 'primereact/progressbar';
 import { Card } from 'primereact/card';
-import Ease_Logo from './Ease Logo.png';
-import Profile_image from './profile.jpg';
-import black from './Solid_black.png';
-import defaultImage from "./default.png";
-const space = "       "
+import Navbar from '../components/navbar';
 
-function Home() {
+export function ProfilePage() {
+    const easeLogo = "../images/Ease Logo.png";
+    const profileImage = "../images/Profile_image.png";
+    const solidBlackImage = "..images/Solid_black.png";
+    const defaultImage = "..images/default.png";
+
     const items = [
         { label: 'Home', icon: 'pi pi-home' },
         { label: 'Profile', icon: 'pi pi-user' }
     ];
 
 
-    const start = <img alt="logo" src={Ease_Logo} height="40" />;
-    const end = <Button  label={<img src={Profile_image} style={{width: '1.5rem', height: '1.5rem', borderRadius: '50%', border: '1px solid black'  }} />}  className="p-button-rounded"  />;
+    const start = <img alt="logo" src={"../images/Ease Logo.png"} height="40" />;
+    const end = <Button  label={<img src={profileImage} style={{width: '1.5rem', height: '1.5rem', borderRadius: '50%', border: '1px solid black'  }} />}  className="p-button-rounded"  />;
     const [username, setUsername] = useState("USER NAME");
     const [pomodoroValue, setValue] = useState(5);
     const [pomodoroChecked, setChecked] = useState(false);
@@ -32,8 +33,8 @@ function Home() {
 
 
     const achievements =[
-        {title: 'Welcome to EASE', description: 'You made a account!', unlocked:true, imagesrc:Ease_Logo },
-        {title: 'Establishing yourself', description: 'You edited your profile!', unlocked:true, imagesrc: Profile_image},
+        {title: 'Welcome to EASE', description: 'You made a account!', unlocked:true, imagesrc:easeLogo },
+        {title: 'Establishing yourself', description: 'You edited your profile!', unlocked:true, imagesrc:profileImage},
         {title: 'Getting it done', description: 'You completed a task!', unlocked:true, imagesrc:defaultImage},
         {title: 'Level Up!', description: 'You leveled up!', unlocked:true, imagesrc:defaultImage},
         {title: 'Achievement 5', description: 'This is hard', unlocked:false, imagesrc:defaultImage},
@@ -54,8 +55,7 @@ function Home() {
 
     return (
         <div className="App" >
-            {/* Navbar */}
-            <Menubar model={items} start={start} end={end} />
+            <Navbar/>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%', marginTop: '10px' }}>
                 <p style={{ margin: 0, marginBottom: '0px'}}>Level {level}</p>
@@ -103,7 +103,7 @@ function Home() {
                             <p style={{ marginBottom: '0', marginTop: '0px' }}> Current Profile Picture</p>
                         </div>
                         <Card style={{border: '2px solid #00b4d8',borderRadius: '8px', marginLeft: '130px', marginTop: '20px', maxWidth: '300px', justifyContent: 'center', alignItems: 'center' }}>  
-                            <Avatar image={Profile_image} className="mr-2" shape='circle' style={{ width: '8rem', height: '8rem', borderRadius: '50%', border: '4px solid #00b4d8', padding: '0.2rem', marginLeft: '70px' }} ></Avatar>
+                            <Avatar image={profileImage} className="mr-2" shape='circle' style={{ width: '8rem', height: '8rem', borderRadius: '50%', border: '4px solid #00b4d8', padding: '0.2rem', marginLeft: '70px' }} ></Avatar>
                         </Card>
                         <Button label="Change Profile Picture" style={{ marginTop: '10px', marginBottom: '10px', marginLeft:'30px'}} />
                     </Card>
@@ -154,7 +154,7 @@ function Home() {
                                         </>
                                     ): (
                                         <>
-                                            <Avatar image={black} className="mr-2" shape='circle' style={{width: '4rem', height: '4rem', borderRadius: '50%', border: '2px solid #FF6961', padding: '0.2rem', }}/>
+                                            <Avatar image={solidBlackImage} className="mr-2" shape='circle' style={{width: '4rem', height: '4rem', borderRadius: '50%', border: '2px solid #FF6961', padding: '0.2rem', }}/>
                                             <div style={{ flex: '1', marginLeft: '0.5rem' }}>
                                                 <Skeleton width="75%" className="mb-2" style={{
                                                     backgroundColor: '#003d5d', // Custom background color for text skeleton
@@ -186,5 +186,3 @@ function Home() {
         </div>
     );
 }
-
-export default Home;
