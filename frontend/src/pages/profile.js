@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, cloneElement } from 'react';
 import { Button } from 'primereact/button';
 import { InputSwitch } from 'primereact/inputswitch';
 import { InputNumber } from 'primereact/inputnumber';
@@ -128,7 +128,7 @@ export function ProfilePage() {
             </div>
 
             {/* Profile Section */}
-            <h1>Profile</h1>
+            <h1 style={{ textAlign: 'center'}}>Profile</h1>
             <div style={{
                 display: 'flex',
                 justifyContent: 'flex-end',
@@ -158,39 +158,50 @@ export function ProfilePage() {
                 </Card>
 
                 {/* New Personal Information Card */}
-                <Card style={{ border: '2px solid #00b4d8', borderRadius: '8px', maxWidth: '400px', height: '360px', marginLeft: '50px' }}>
-                    <div style={{ padding: '10px' }}>
-                        <h3>Personal Information</h3>
+                <Card style={{ border: '2px solid #00b4d8', borderRadius: '8px', maxWidth: '600px', height: '360px', marginLeft: '50px' }}>
+                <div style={{ padding: '10px' }}>
+                    <h3>Personal Information</h3>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                        <label style={{ width: '100px', marginRight: '10px' }}>Full Name:</label>
                         <InputText 
                             value={fullName} 
                             onChange={(e) => setFullName(e.target.value)} 
                             disabled={!isEditing} 
                             placeholder="Full Name" 
-                            style={{ marginBottom: '10px' }} 
+                            style={{ flex: 1 }} 
                         />
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                        <label style={{ width: '100px', marginRight: '10px' }}>Email:</label>
                         <InputText 
                             value={email} 
                             onChange={(e) => setEmail(e.target.value)} 
                             disabled={!isEditing} 
                             placeholder="Email" 
-                            style={{ marginBottom: '10px' }} 
+                            style={{ flex: 1 }} 
                         />
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                        <label style={{ width: '100px', marginRight: '10px' }}>Phone:</label>
                         <InputText 
                             value={phone} 
                             onChange={(e) => setPhone(e.target.value)} 
                             disabled={!isEditing} 
                             placeholder="Phone" 
-                            style={{ marginBottom: '10px' }} 
+                            style={{ flex: 1 }} 
                         />
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                        <label style={{ width: '100px', marginRight: '10px' }}>Address:</label>
                         <InputText 
                             value={address} 
                             onChange={(e) => setAddress(e.target.value)} 
                             disabled={!isEditing} 
                             placeholder="Address" 
-                            style={{ marginBottom: '10px' }} 
+                            style={{ flex: 1 }} 
                         />
-                        <div>
-                        {/* Move the button here */}
+                    </div>
+                    <div>
                         <Button 
                             label={isEditing ? "Save Changes" : "Edit"} 
                             onClick={() => {
@@ -199,11 +210,11 @@ export function ProfilePage() {
                                 }
                                 setIsEditing(!isEditing); 
                             }} 
-                            style={{ marginTop: '10px' }} // Optional: add some margin for spacing
+                            style={{ marginTop: '10px'}} 
                         />
-                        </div>
                     </div>
-                </Card>
+                </div>
+            </Card>
             </div>
 
                 {/* Social Media Links Card */}
@@ -262,13 +273,8 @@ export function ProfilePage() {
                 </Card>
             </div>
 
-            {/* Task Completion Button */}
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                <Button label="Complete Task" icon="pi pi-check" onClick={increaseProgress} />
-            </div>
-
             {/* Achievements Section */}
-            <h1>Achievements</h1>
+            <h1 style={{ textAlign: 'center'}}>Achievements</h1>
             <div style={{ borderTop: '1px solid #ccc', maxWidth: '1000px', margin: '0 auto' }} />
 
             <div className="parent-container" style={{ width: '100vw', height: '100vh' }}>
