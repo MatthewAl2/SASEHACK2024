@@ -11,6 +11,7 @@ import { ProgressBar } from 'primereact/progressbar';
 import { Card } from 'primereact/card';
 import Ease_Logo from './Ease Logo.png';
 import Profile_image from './profile.jpg';
+import black from './Solid_black.png'
 const showerPath = "images\shower.jpg"
 const space = "       "
 
@@ -151,11 +152,7 @@ function Home() {
                                         </>
                                     ): (
                                         <>
-                                            <Skeleton shape="circle" size="4rem" className="mr-2" style={{
-                                            backgroundColor: '#003d5d', 
-                                            animationBackgroundColor: '#003d5d',
-                                            animation: 'none'
-                                        }} />
+                                            <Avatar image={black} className="mr-2" shape='circle' style={{width: '4rem', height: '4rem', borderRadius: '50%', border: '4px solid #efda6b', padding: '0.2rem', }}/>
                                             <div style={{ flex: '1', marginLeft: '0.5rem' }}>
                                                 <Skeleton width="75%" className="mb-2" style={{
                                                     backgroundColor: '#003d5d', // Custom background color for text skeleton
