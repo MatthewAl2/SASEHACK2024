@@ -9,16 +9,15 @@ import { useEffect } from 'react';
 import { Divider } from 'primereact/divider';
 import { ProgressBar } from 'primereact/progressbar';
 import { Card } from 'primereact/card';
-import Ease_Logo from '../images/Ease Logo.png';
+import Ease_Logo from './Ease Logo.png';
 const showerPath = "images\shower.jpg"
 const space = "       "
 
 
 function Home() {
     const items = [
-        { label: 'EASE', icon: 'pi pi-home' },
-        {label: 'Profile', icon: 'pi pi-profile'}
-        
+        { label: 'Home', icon: 'pi pi-home' },
+        { label: 'Profile', icon: 'pi pi-user' }
     ];
 
 
@@ -57,9 +56,9 @@ function Home() {
             {/* Navbar */}
             <Menubar model={items} start={start} end={end} />
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%' }}>
-                <p style={{ margin: 0 }}>Level {level}</p>
-                <ProgressBar value={progress} style={{ flex: 1, marginBottom: "0px, "}} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%', marginTop: '10px' }}>
+                <p style={{ margin: 0, marginBottom: '0px'}}>Level {level}</p>
+                <ProgressBar value={progress} style={{ flex: 1, marginBottom: '0px'}} />
             </div>
 
             <h1>Profile</h1>
