@@ -19,11 +19,6 @@ export default function Navbar(props) {
       { 
          label: 'Contact', 
          icon: 'pi pi-envelope' 
-      },
-      { 
-         label: 'Profile', 
-         icon: 'pi pi-user',  // Changed icon for profile
-         command: () => navigate('/profile')  // Navigate to the profile route
       }
    ];
 
@@ -39,6 +34,7 @@ export default function Navbar(props) {
                 src="../images/loggedInUser.jpg" 
                 alt="Profile" 
                 style={styles.profileImage} 
+               onClick={() => navigate('/profile')}
             />
         </div>
     ) : (
@@ -46,6 +42,7 @@ export default function Navbar(props) {
             label="Login" 
             icon="pi pi-user" 
             className="p-button-rounded" 
+            onClick={() => navigate('/login')}
         />
     );
 

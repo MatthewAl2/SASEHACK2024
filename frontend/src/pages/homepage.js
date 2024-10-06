@@ -96,8 +96,8 @@ export default function Home() {
         
         try {
             // Make the POST request using axios
-            const id = await card.id
-            const response = await axios.put('http://127.0.0.1:5000/tasks/' + id, {
+            const taskId = await card.id
+            const response = await axios.put('http://127.0.0.1:5000/tasks/' + taskId, {
                 name: card.title,
                 weight: 0,
                 description: card.content,
