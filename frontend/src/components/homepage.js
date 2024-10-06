@@ -4,7 +4,6 @@ import { TabMenu } from 'primereact/tabmenu';
 import Card from './card';
 import { Dialog } from 'primereact/dialog';
 import Navbar from './navbar';
-import Ease_Logo from '../images/Ease Logo.png';
 import { Calendar } from 'primereact/calendar';
 import '../styles/home.css'; // Import the CSS file for styles
 
@@ -110,14 +109,6 @@ export default function Home() {
         );
     };
 
-    const items = [
-        { label: 'About', icon: 'pi pi-info-circle' },
-        { label: 'Contact', icon: 'pi pi-envelope' }
-    ];
-
-    const start = <img alt="logo" src={Ease_Logo} height="40" />;
-    const end = <Button label="Sign Up" icon="pi pi-user" className="p-button-rounded" />;
-
     const tabItems = [
         { label: 'All Tasks', icon: 'pi pi-list' },
         { label: 'Not Started', icon: 'pi pi-clock' },
@@ -136,7 +127,6 @@ export default function Home() {
         <div className="App">
             <Navbar />
         <div className="App home-background">
-            <Menubar model={items} start={start} end={end} />
 
             <div className="hero" style={{ textAlign: 'center', marginTop: '20px' }}>
                 <h1>Welcome to EASE</h1>

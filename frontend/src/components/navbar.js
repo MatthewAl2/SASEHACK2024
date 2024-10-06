@@ -11,7 +11,7 @@ export default function Navbar () {
       { label: 'Contact', icon: 'pi pi-envelope' }
    ];
 
-   const logo = <img alt="logo" src="https://primereact.org/images/logo.png" height="40" />;
+   const logo = <img alt="logo" src='../images/Ease Logo.png' height="40" />;
 
 
    const login = <Button label="Login" icon="pi pi-user" className="p-button-rounded" onClick={() => navigate('/loginPage')}/>;
