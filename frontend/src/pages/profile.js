@@ -57,6 +57,27 @@ export function ProfilePage() {
         }
     }, []);
 
+        // Load stored data from localStorage when the component mounts
+        useEffect(() => {
+            const storedFullName = localStorage.getItem('fullName');
+            const storedEmail = localStorage.getItem('email');
+            const storedPhone = localStorage.getItem('phone');
+            const storedAddress = localStorage.getItem('address');
+            const storedFacebook = localStorage.getItem('facebook');
+            const storedTwitter = localStorage.getItem('twitter');
+            const storedInstagram = localStorage.getItem('instagram');
+            const storedLinkedin = localStorage.getItem('linkedin');
+    
+            if (storedFullName) setFullName(storedFullName);
+            if (storedEmail) setEmail(storedEmail);
+            if (storedPhone) setPhone(storedPhone);
+            if (storedAddress) setAddress(storedAddress);
+            if (storedFacebook) setFacebook(storedFacebook);
+            if (storedTwitter) setTwitter(storedTwitter);
+            if (storedInstagram) setInstagram(storedInstagram);
+            if (storedLinkedin) setLinkedin(storedLinkedin);
+        }, []);
+
     // Function to increase progress
     const increaseProgress = () => {
         if (progress < 100) {
@@ -83,6 +104,18 @@ export function ProfilePage() {
             reader.readAsDataURL(file);
         }
     };
+
+        // Save personal information to local storage whenever it changes
+        useEffect(() => {
+            localStorage.setItem('fullName', fullName);
+            localStorage.setItem('email', email);
+            localStorage.setItem('phone', phone);
+            localStorage.setItem('address', address);
+            localStorage.setItem('facebook', facebook);
+            localStorage.setItem('twitter', twitter);
+            localStorage.setItem('instagram', instagram);
+            localStorage.setItem('linkedin', linkedin);
+        }, [fullName, email, phone, address, facebook, twitter, instagram, linkedin]);
 
     return (
         <div className="App">
@@ -117,7 +150,7 @@ export function ProfilePage() {
                         {/* File input for changing profile picture */}
                         <input type="file" accept="image/*" onChange={handleProfilePictureChange} style={{ display: 'none' }} id="profilePicInput" />
                         <label htmlFor="profilePicInput">
-                            <Button label="Upload New Picture" type="button" />
+                            <Button label="Upload New Picture" type="button" style={{marginBottom: '10px'}} />
                         </label>
                         <InputText value={username} onChange={(e) => setUsername(e.target.value)} style={{ marginBottom: '10px' }} />
                         <Button label="Change Name" />
