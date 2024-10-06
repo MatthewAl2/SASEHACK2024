@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Button } from 'primereact/button';
-import { Menubar } from 'primereact/menubar';
 import { InputSwitch } from 'primereact/inputswitch';
 import { InputNumber } from 'primereact/inputnumber';
 import { Avatar } from 'primereact/avatar';
@@ -14,9 +13,9 @@ import Navbar from '../components/navbar';
 
 export function ProfilePage() {
     const easeLogo = "../images/Ease Logo.png";
-    const profileImage = "../images/Profile_image.png";
-    const solidBlackImage = "..images/Solid_black.png";
-    const defaultImage = "..images/default.png";
+    const profileImage = '../images/profile.jpg';    
+    const solidBlackImage = "../images/Solid_black.png";
+    const defaultImage = "../images/default.png";
 
     const items = [
         { label: 'Home', icon: 'pi pi-home' },

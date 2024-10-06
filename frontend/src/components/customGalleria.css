@@ -1,0 +1,6 @@
+
+
+/* Adjusting the thumbnail container height */
+.custom-galleria .p-galleria-thumbnail-container {
+    height: 50px; /* Adjust height of the whole thumbnail bar */
+}
