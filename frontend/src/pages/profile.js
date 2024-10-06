@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Button } from 'primereact/button';
-import { Menubar } from 'primereact/menubar';
 import { InputSwitch } from 'primereact/inputswitch';
 import { InputNumber } from 'primereact/inputnumber';
 import { Avatar } from 'primereact/avatar';
