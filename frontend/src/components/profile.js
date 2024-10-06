@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { Divider } from 'primereact/divider';
 import { ProgressBar } from 'primereact/progressbar';
 import { Card } from 'primereact/card';
+import Ease_Logo from '../images/Ease Logo.png';
 const showerPath = "images\shower.jpg"
 const space = "       "
 
@@ -20,13 +21,15 @@ function Home() {
         
     ];
 
-    const start = <img alt="logo" src="https://primereact.org/images/logo.png" height="40" />;
-    const end = <Button icon="pi pi-user" className="p-button-rounded" />;
+
+    const start = <img alt="logo" src={Ease_Logo} height="40" />;
+    const end = <Button label="Sign Up" icon="pi pi-user" className="p-button-rounded" />;
     const [username, setUsername] = useState("USER NAME");
     const [pomodoroValue, setValue] = useState(5);
     const [pomodoroChecked, setChecked] = useState(false);
     const [progress, setProgress] = useState(50)
     const [level, setLevel] = useState(1)
+
 
     const achievements =[
         {title: 'Achievement 1', description: 'This is your first achievment!', unlocked:true},
