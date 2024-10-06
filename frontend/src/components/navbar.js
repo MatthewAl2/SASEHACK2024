@@ -6,11 +6,22 @@ import React from 'react';
 export default function Navbar(props) {
     const navigate = useNavigate();
 
+<<<<<<< HEAD
     const items = [
         { label: 'Home', icon: 'pi pi-home', onclick: () => navigate('/') },
         { label: 'About', icon: 'pi pi-info-circle' },
         { label: 'Contact', icon: 'pi pi-envelope' }
     ];
+=======
+export default function Navbar () {
+   const navigate = useNavigate();
+   const items = [
+      { label: 'Home', icon: 'pi pi-home', command: () => navigate('/')},
+      { label: 'About', icon: 'pi pi-info-circle' },
+      { label: 'Contact', icon: 'pi pi-envelope' },
+      { label: 'Profile', icon: 'pi pi-envelope', command: () => navigate('/profile') }
+   ];
+>>>>>>> e3bbc6ee87f8dcd4e24398ea59569c6c97ca5b01
 
     const logo = <img alt="logo" src="../images/Ease Logo.png" height="40" />;
 
