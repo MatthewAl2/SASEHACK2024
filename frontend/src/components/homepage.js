@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'primereact/button';
-import { Menubar } from 'primereact/menubar';
 import { TabMenu } from 'primereact/tabmenu';
 import Card from './card';
 import { Dialog } from 'primereact/dialog';
-import Ease_Logo from '../images/Ease Logo.png';
+import Navbar from './navbar';
 import { Calendar } from 'primereact/calendar';
 import DailyCard from './dailycard'; // Import the DailyCard component
 import '../styles/home.css'; // Import the CSS file for styles
@@ -129,14 +128,6 @@ export default function Home() {
         );
     };
 
-    const items = [
-        { label: 'About', icon: 'pi pi-info-circle' },
-        { label: 'Contact', icon: 'pi pi-envelope' }
-    ];
-
-    const start = <img alt="logo" src={Ease_Logo} height="40" />;
-    const end = <Button label="Sign Up" icon="pi pi-user" className="p-button-rounded" />;
-
     const tabItems = [
         { label: 'All Tasks', icon: 'pi pi-list' },
         { label: 'Not Started', icon: 'pi pi-clock' },
@@ -151,8 +142,10 @@ export default function Home() {
     const allTasks = [...notStartedTasks, ...inProgressTasks, ...completedTasks];
 
     return (
+
+        <div className="App">
+            <Navbar />
         <div className="App home-background">
-            <Menubar model={items} start={start} end={end} />
 
             <div className="hero" style={{ textAlign: 'center', marginTop: '20px' }}>
                 <h1>Welcome to EASE</h1>
@@ -344,6 +337,7 @@ export default function Home() {
                     style={{ marginTop: '20px', width: '100%' }}
                 />
             </Dialog>
+        </div>
         </div>
     );
 }
