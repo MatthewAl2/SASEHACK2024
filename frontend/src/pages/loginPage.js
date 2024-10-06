@@ -1,10 +1,13 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useContext} from 'react';
 import Navbar from '../components/navbar';
 import ImageGallery from '../components/gallery';
 import { InputText } from 'primereact/inputtext';
 import axios from 'axios';
 import { Button } from 'primereact/button';
 import { useNavigate } from 'react-router-dom';
+
+
+let userGlobalID = null;
 
 export default function LoginPage() {
     // Define styles as JS objects
@@ -86,6 +89,7 @@ export default function LoginPage() {
       setPassword(e.target.value);
   };
 
+   let userID = -1;
    const userExists = () => {
    
       for (let i = 0; i < data.length; i++) {
@@ -94,12 +98,14 @@ export default function LoginPage() {
             user = true;
          }
          if (user) { 
+            userGlobalID = data[i].id;
             console.log('User exists');
             navigate('/');
+            break;
          }
-      }
-      
+      }      
    };
+   userGlobalID = useContext(userID);
     return (
       <>
       <Navbar />
@@ -119,6 +125,7 @@ export default function LoginPage() {
                            <InputText id="password" type="text" className="p-inputtext-lg" placeholder="Enter your password" style={styles.inputText} onInput={handlePasswordChange}/>
                      </div>
                      <Button label="Login" className="p-button-lg" style={{ width: '100%', marginTop: '20px' }} onClick={userExists} />
+                     
                      <Button label="Create an Account" className="p-button-lg" style={{ width: '100%', marginTop: '20px' }} onClick={() => navigate( '/signUpPage ')} />
 
                      
@@ -128,3 +135,5 @@ export default function LoginPage() {
       </>
     );
 }
+
+export { userGlobalID };

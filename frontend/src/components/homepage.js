@@ -6,9 +6,42 @@ import { Dialog } from 'primereact/dialog';
 import Navbar from './navbar';
 import { Calendar } from 'primereact/calendar';
 import '../styles/home.css'; // Import the CSS file for styles
+import { userGlobalID } from '../pages/loginPage';
+import axios from 'axios';
+import { ProgressBar } from 'primereact/progressbar';
 
 export default function Home() {
     const initialCards = [];
+
+    // User information
+    const [data, setData] = useState([]);
+    console.log(userGlobalID);
+
+    useEffect(() => {
+        // Declare an async function inside useEffect
+        const fetchData = async () => {
+            try {
+                // Await the axios.get call
+                const response = await axios.get('http://127.0.0.1:5000/users/' + userGlobalID);
+                // Update state with the response data
+                setData(response.data);
+            } catch (error) {
+                console.error('Error fetching data:', error.message);
+            }
+        };
+
+        fetchData();
+    }, [userGlobalID]); // Dependency array includes userGlobalID if it changes
+
+
+    const totalXPBar = 200 / (1 + Math.E ** (-0.025 * (data.level - 150)));
+    console.log(data.xp)
+
+
+
+
+
+
 
     const loadCards = () => {
         const savedCards = localStorage.getItem('cards');
@@ -131,6 +164,10 @@ export default function Home() {
             <div className="hero" style={{ textAlign: 'center', marginTop: '20px' }}>
                 <h1>Welcome to EASE</h1>
                 <p>Ease the weight of tasks off your shoulders</p>
+            </div>
+            <div style={{ maxWidth: '950px', margin: '20px auto', textAlign: 'center' }}>
+                <h2>Level {data.level}</h2>
+                <ProgressBar value={data.xp} displayValueTemplate={totalXPBar} color='green'></ProgressBar>
             </div>
 
             <TabMenu
