@@ -7,6 +7,7 @@ import { Skeleton } from 'primereact/skeleton';
 import { useEffect } from 'react';
 import { ProgressBar } from 'primereact/progressbar';
 import { Card } from 'primereact/card';
+import { InputText } from 'primereact/inputtext'
 import Navbar from '../components/navbar';
 
 export function ProfilePage() {
@@ -59,13 +60,6 @@ export function ProfilePage() {
             }
         };
 
-    const handleChangeName = () => {
-        const newName = window.prompt("Enter your new username:", username);
-        if (newName) {
-            setUsername(newName);
-        }
-    };
-
     return (
         <div className="App" >
             <Navbar/>
@@ -97,8 +91,6 @@ export function ProfilePage() {
                                     <p style={{ marginBottom: '0', marginTop: '0px' }}>Username: {username}</p>
                                 </div>
                             </div>
-
-                            <Button label="Change Name" style={{ marginTop: '0px', marginBottom: '10px', marginLeft: '30px' }} onClick={handleChangeName} />
                             </Card>
 
 
@@ -116,17 +108,20 @@ export function ProfilePage() {
                         </Card>
                     </div>
                 
-                    
-
-                    <Card style={{border: '4px solid #00b4d8',borderRadius: '8px', marginLeft: '20px', marginTop: '0px', width: '600px', height: '335px'}}>
-                        <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: '0px', marginTop: '0px'}}>
-                            <i className="pi pi-camera" style={{ marginRight: '10px', marginTop: '0px' }}></i>
-                            <p style={{ marginBottom: '0', marginTop: '0px' }}> Current Profile Picture</p>
-                        </div>
-                        <Card style={{border: '2px solid #00b4d8',borderRadius: '8px', marginLeft: '130px', marginTop: '20px', maxWidth: '300px', justifyContent: 'center', alignItems: 'center' }}>  
+                    <Card style={{border: '4px solid #00b4d8',borderRadius: '8px', marginLeft: '20px', marginTop: '0px', width: '300px', height: '400px'}}>
+                        <div style={{marginLeft: '0px', marginTop: '20px', maxWidth: '300px', justifyContent: 'center', alignItems: 'center' }}>  
                             <Avatar image={profileImage} className="mr-2" shape='circle' style={{ width: '8rem', height: '8rem', borderRadius: '50%', border: '4px solid #00b4d8', padding: '0.2rem', marginLeft: '70px' }} ></Avatar>
-                        </Card>
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <i className="pi pi-user" style={{ marginRight: '10px', marginTop: '0px' }}></i>
+                                    <p style={{ marginBottom: '0', marginTop: '0px' }}>{username}</p>
+                                </div>
+                            </div>
+                        </div>
                         <Button label="Change Profile Picture" style={{ marginTop: '10px', marginBottom: '10px', marginLeft:'30px'}} />
+                        <InputText value={username} onChange={(e) => setUsername(e.target.value)} style={{ marginTop: '5px', marginBottom: '5px', marginLeft:'20px'}}/>
+                        <Button label="Change Name" style={{ flexShrink: 0, marginTop: '0px', marginBottom: '10px', whiteSpace: 'nowrap', marginLeft: '55px' }} />
+
                     </Card>
                 </div>
 
