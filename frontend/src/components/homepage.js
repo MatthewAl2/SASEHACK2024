@@ -34,11 +34,23 @@ export default function Home() {
     }, [userGlobalID]); // Dependency array includes userGlobalID if it changes
 
 
-    const totalXPBar = 200 / (1 + Math.E ** (-0.025 * (data.level - 150)));
-    console.log(data.xp)
+    const userXP = data[0]?.xp !== undefined ? data[0].xp : 0;
+    const userLevel = data[0]?.level !== undefined ? data[0].level : 0;
 
-
-
+    const totalXPBar = () => {    
+        // Equation using level
+        const totalXP = 200 / (1 + Math.E ** (-0.025 * (userLevel - 150)));
+        
+        return totalXP;  // Make sure the function returns the calculated value
+    };
+    const userLoggedIn = () => {
+        if (userGlobalID === -1) {
+            return false;
+        } 
+        else {
+            return true
+        }
+    }
 
 
 
@@ -158,7 +170,7 @@ export default function Home() {
     return (
 
         <div className="App">
-            <Navbar />
+            <Navbar userLoggedIn={userLoggedIn}/>
         <div className="App home-background">
 
             <div className="hero" style={{ textAlign: 'center', marginTop: '20px' }}>
@@ -166,8 +178,8 @@ export default function Home() {
                 <p>Ease the weight of tasks off your shoulders</p>
             </div>
             <div style={{ maxWidth: '950px', margin: '20px auto', textAlign: 'center' }}>
-                <h2>Level {data.level}</h2>
-                <ProgressBar value={data.xp} displayValueTemplate={totalXPBar} color='green'></ProgressBar>
+                <h2>Level {userLevel}</h2>
+                <ProgressBar value={userXP} displayValueTemplate={totalXPBar} color='green'></ProgressBar>
             </div>
 
             <TabMenu
