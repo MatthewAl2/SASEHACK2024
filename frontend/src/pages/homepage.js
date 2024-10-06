@@ -13,7 +13,7 @@ export default function Home() {
     const initialDailyChallenges = [
         { id: 1, title: "Drink 2 liters of water", content: "Stay hydrated!", completed: false },
         { id: 2, title: "30 minutes of exercise", content: "Get moving!", completed: false },
-        { id: 2, title: "Meal prep", content: "Cook something!", completed: false },
+        { id: 3, title: "Meal prep", content: "Cook something!", completed: false },
 
         // Add more daily challenges as needed
     ];

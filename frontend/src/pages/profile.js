@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Button } from 'primereact/button';
-import { Menubar } from 'primereact/menubar';
 import { InputSwitch } from 'primereact/inputswitch';
 import { InputNumber } from 'primereact/inputnumber';
 import { Avatar } from 'primereact/avatar';
 import { Skeleton } from 'primereact/skeleton';
 import { useEffect } from 'react';
-import { Divider } from 'primereact/divider';
 import { ProgressBar } from 'primereact/progressbar';
 import { Card } from 'primereact/card';
 import Navbar from '../components/navbar';
@@ -17,14 +15,6 @@ export function ProfilePage() {
     const solidBlackImage = "..images/Solid_black.png";
     const defaultImage = "..images/default.png";
 
-    const items = [
-        { label: 'Home', icon: 'pi pi-home' },
-        { label: 'Profile', icon: 'pi pi-user' }
-    ];
-
-
-    const start = <img alt="logo" src={"../images/Ease Logo.png"} height="40" />;
-    const end = <Button  label={<img src={profileImage} style={{width: '1.5rem', height: '1.5rem', borderRadius: '50%', border: '1px solid black'  }} />}  className="p-button-rounded"  />;
     const [username, setUsername] = useState("USER NAME");
     const [pomodoroValue, setValue] = useState(5);
     const [pomodoroChecked, setChecked] = useState(false);
@@ -53,6 +43,29 @@ export function ProfilePage() {
         }
     }, []);
 
+        // Function to increase progress
+        const increaseProgress = () => {
+            // Increase progress by 10%
+            if (progress < 100) {
+                setProgress(prevProgress => {
+                    const newProgress = prevProgress + 10;
+                    // Level up if progress reaches 100
+                    if (newProgress >= 100) {
+                        setLevel(level + 1);
+                        return 0; // Reset progress after leveling up
+                    }
+                    return newProgress;
+                });
+            }
+        };
+
+    const handleChangeName = () => {
+        const newName = window.prompt("Enter your new username:", username);
+        if (newName) {
+            setUsername(newName);
+        }
+    };
+
     return (
         <div className="App" >
             <Navbar/>
@@ -65,8 +78,16 @@ export function ProfilePage() {
 
 
             <h1 style={{marginBottom:'0px'}}>Profile</h1>
-            <Divider />
-                
+            <div style={{
+    display: 'flex',        // Use flexbox for alignment
+    justifyContent: 'flex-end',  // Move the line to the right
+    width: '100%',          // Full width
+    maxWidth: '1000px',     // Max width constraint
+    margin: '0 auto',       // Center the container horizontally
+    borderTop: '1px solid #ccc'  // Style for the divider line
+}} />
+
+        
                 <div style={{ display: 'flex', gap: '150px', marginTop: '10px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                         <Card style={{border: '2px solid #00b4d8',borderRadius: '8px', marginLeft: '20px', marginTop: '0px', maxWidth: '230px'}}>
@@ -77,8 +98,8 @@ export function ProfilePage() {
                                 </div>
                             </div>
 
-                            <Button label="Change Name" style={{ marginTop: '0px', marginBottom: '10px', marginLeft:'30px'}} />
-                        </Card>
+                            <Button label="Change Name" style={{ marginTop: '0px', marginBottom: '10px', marginLeft: '30px' }} onClick={handleChangeName} />
+                            </Card>
 
 
 
@@ -109,24 +130,33 @@ export function ProfilePage() {
                     </Card>
                 </div>
 
-                
+                            {/* Button to simulate task completion and increase progress */}
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                <Button label="Complete Task" icon="pi pi-check" onClick={increaseProgress} />
+            </div>
             
-
             <h1>Achievements</h1>
-            <Divider />
+            <div style={{
+    display: 'flex',        // Use flexbox for alignment
+    justifyContent: 'flex-end',  // Move the line to the right
+    width: '100%',          // Full width
+    maxWidth: '1000px',     // Max width constraint
+    margin: '0 auto',       // Center the container horizontally
+    borderTop: '1px solid #ccc'  // Style for the divider line
+}} />
+
             <div className="parent-container" style={{ width: '100vw', height: '100vh' }}>
-                <div className="achievment-window" style = {{
+                <div className="achievment-window" style={{
                     alignContent: 'center',
                     maxHeight: '500px',
                     overflowY: 'auto', 
                     width: '80rem',
-                    margin: '10px',
+                    margin: '250px',  // Adjust this margin to reduce space
                     border: '2px solid #00b4d8',
                     borderRadius: '20px',
                     boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
-                    boxSizing: 'border-box', 
+                    boxSizing: 'border-box',
                     marginTop: '0px'
-                    
                 }}>
                     
                     <ul className="grid" style={{
@@ -141,7 +171,9 @@ export function ProfilePage() {
                                 backgroundColor: '#a2d9a1', 
                                 border: '2px solid #00b4d8',    
                                 borderRadius: '8px',        
-                                padding: '1rem',   
+                                padding: '1rem', 
+                                marginRight: '20px',  
+                                marginLeft: '-20px'
                                 }}>
                                 <div className="flex" style={{ alignItems: 'center'}}>
                                     {item.unlocked ? (
