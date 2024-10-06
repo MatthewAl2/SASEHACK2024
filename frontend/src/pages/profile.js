@@ -10,27 +10,30 @@ import { Divider } from 'primereact/divider';
 import { ProgressBar } from 'primereact/progressbar';
 import { Card } from 'primereact/card';
 import Navbar from '../components/navbar';
+import { userGlobalID } from '../pages/loginPage';
+
 
 export function ProfilePage() {
     const easeLogo = "../images/Ease Logo.png";
     const profileImage = "../images/Profile_image.png";
     const solidBlackImage = "..images/Solid_black.png";
     const defaultImage = "..images/default.png";
-
-    const items = [
-        { label: 'Home', icon: 'pi pi-home' },
-        { label: 'Profile', icon: 'pi pi-user' }
-    ];
-
-
-    const start = <img alt="logo" src={"../images/Ease Logo.png"} height="40" />;
-    const end = <Button  label={<img src={profileImage} style={{width: '1.5rem', height: '1.5rem', borderRadius: '50%', border: '1px solid black'  }} />}  className="p-button-rounded"  />;
+    
+    
     const [username, setUsername] = useState("USER NAME");
     const [pomodoroValue, setValue] = useState(5);
     const [pomodoroChecked, setChecked] = useState(false);
     const [progress, setProgress] = useState(50)
     const [level, setLevel] = useState(1)
 
+    const userLoggedIn = () => {
+        if (userGlobalID === -1) {
+            return false;
+        } 
+        else {
+            return true
+        }
+    }
 
     const achievements =[
         {title: 'Welcome to EASE', description: 'You made a account!', unlocked:true, imagesrc:easeLogo },
@@ -55,7 +58,8 @@ export function ProfilePage() {
 
     return (
         <div className="App" >
-            <Navbar/>
+                <Navbar userLoggedIn={userLoggedIn}/>
+
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%', marginTop: '10px' }}>
                 <p style={{ margin: 0, marginBottom: '0px'}}>Level {level}</p>

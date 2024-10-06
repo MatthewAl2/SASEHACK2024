@@ -7,10 +7,20 @@ export default function Navbar(props) {
     const navigate = useNavigate();
 
     const items = [
-        { label: 'Home', icon: 'pi pi-home', onclick: () => navigate('/') },
-        { label: 'About', icon: 'pi pi-info-circle' },
-        { label: 'Contact', icon: 'pi pi-envelope' }
-    ];
+      { 
+         label: 'Home', 
+         icon: 'pi pi-home',
+         command: () => navigate('/')  // Navigate to the home route
+      },
+      { 
+         label: 'About', 
+         icon: 'pi pi-info-circle' 
+      },
+      { 
+         label: 'Contact', 
+         icon: 'pi pi-envelope' 
+      }
+   ];
 
     const logo = <img alt="logo" src="../images/Ease Logo.png" height="40" />;
 
@@ -21,10 +31,10 @@ export default function Navbar(props) {
     const login = userLoggedIn ? (
         <div style={styles.profileContainer}>
             <img 
-                src="../images/profile.png" 
+                src="../images/loggedInUser.jpg" 
                 alt="Profile" 
                 style={styles.profileImage} 
-                onClick={() => navigate('/profile')}
+               onClick={() => navigate('/profile')}
             />
         </div>
     ) : (
@@ -32,7 +42,7 @@ export default function Navbar(props) {
             label="Login" 
             icon="pi pi-user" 
             className="p-button-rounded" 
-            onClick={() => navigate('/loginPage')}
+            onClick={() => navigate('/login')}
         />
     );
 

@@ -96,8 +96,8 @@ export default function Home() {
         
         try {
             // Make the POST request using axios
-            const id = await card.id
-            const response = await axios.put('http://127.0.0.1:5000/tasks/' + id, {
+            const taskId = await card.id
+            const response = await axios.put('http://127.0.0.1:5000/tasks/' + taskId, {
                 name: card.title,
                 weight: 0,
                 description: card.content,
@@ -132,8 +132,26 @@ export default function Home() {
     };
 
 
-    const totalXPBar = 200 / (1 + Math.E ** (-0.025 * (data.level - 150)));
-    
+    const userXP = data[0]?.xp !== undefined ? data[0].xp : 0;
+    const userLevel = data[0]?.level !== undefined ? data[0].level : 0;
+
+    const totalXPBar = () => {    
+        // Equation using level
+        const totalXP = 200 / (1 + Math.E ** (-0.025 * (userLevel - 150)));
+        
+        return totalXP;  // Make sure the function returns the calculated value
+    };
+    const userLoggedIn = () => {
+        if (userGlobalID === -1) {
+            return false;
+        } 
+        else {
+            return true
+        }
+    }
+
+
+
 
     const loadCards = () => {
         const savedCards = localStorage.getItem('cards');
@@ -183,14 +201,14 @@ export default function Home() {
         );
     };
 
-        // Functions to handle daily challenges
-        const toggleDailyChallengeCompleted = (id) => {
-            setDailyChallenges(prevChallenges =>
-                prevChallenges.map(challenge =>
-                    challenge.id === id ? { ...challenge, completed: !challenge.completed } : challenge
-                )
-            );
-        };
+    // Functions to handle daily challenges
+    const toggleDailyChallengeCompleted = (id) => {
+        setDailyChallenges(prevChallenges =>
+            prevChallenges.map(challenge =>
+                challenge.id === id ? { ...challenge, completed: !challenge.completed } : challenge
+            )
+        );
+    };
 
     const toggleCompleted = (id) => {
         setCards((prevCards) =>
@@ -282,7 +300,7 @@ export default function Home() {
     return (
 
         <div className="App">
-            <Navbar />
+            <Navbar userLoggedIn={userLoggedIn}/>
         <div className="App home-background">
 
             <div className="hero" style={{ textAlign: 'center', marginTop: '20px' }}>
@@ -290,8 +308,8 @@ export default function Home() {
                 <p>Ease the weight of tasks off your shoulders</p>
             </div>
             <div style={{ maxWidth: '950px', margin: '20px auto', textAlign: 'center' }}>
-                <h2>Level {data.level}</h2>
-                <ProgressBar value={data.xp} displayValueTemplate={totalXPBar} color='green'></ProgressBar>
+                <h2>Level {userLevel}</h2>
+                <ProgressBar value={userXP} displayValueTemplate={totalXPBar} color='green'></ProgressBar>
             </div>
 
             <TabMenu
