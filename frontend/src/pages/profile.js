@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { Divider } from 'primereact/divider';
 import { ProgressBar } from 'primereact/progressbar';
 import { Card } from 'primereact/card';
+import { InputText } from 'primereact/inputtext';
 import Navbar from '../components/navbar';
 
 export function ProfilePage() {
@@ -67,19 +68,26 @@ export function ProfilePage() {
             <h1 style={{marginBottom:'0px'}}>Profile</h1>
             <Divider />
                 
-                <div style={{ display: 'flex', gap: '150px', marginTop: '10px' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                        <Card style={{border: '2px solid #00b4d8',borderRadius: '8px', marginLeft: '20px', marginTop: '0px', maxWidth: '230px'}}>
-                            <div style={{ margin: '0px' }}>
-                                <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: '0px', marginTop: '0px'}}>
+                <div style={{ display: 'flex', gap: '30px', marginTop: '10px' }}>
+
+                <Card style={{border: '4px solid #00b4d8',borderRadius: '8px', marginLeft: '20px', marginTop: '0px', width: '300px', height: '400px'}}>
+                        <div style={{marginLeft: '0px', marginTop: '20px', maxWidth: '300px', justifyContent: 'center', alignItems: 'center' }}>  
+                            <Avatar image={profileImage} className="mr-2" shape='circle' style={{ width: '8rem', height: '8rem', borderRadius: '50%', border: '4px solid #00b4d8', padding: '0.2rem', marginLeft: '70px' }} ></Avatar>
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                     <i className="pi pi-user" style={{ marginRight: '10px', marginTop: '0px' }}></i>
-                                    <p style={{ marginBottom: '0', marginTop: '0px' }}>Username: {username}</p>
+                                    <p style={{ marginBottom: '0', marginTop: '0px' }}>{username}</p>
                                 </div>
                             </div>
+                        </div>
+                        <Divider/>
+                        <Button label="Change Profile Picture" style={{ marginTop: '10px', marginBottom: '10px', marginLeft:'30px'}} />
+                        <InputText value={username} onChange={(e) => setUsername(e.target.value)} style={{ marginTop: '5px', marginBottom: '5px', marginLeft:'20px'}}/>
+                        <Button label="Change Name" style={{ flexShrink: 0, marginTop: '0px', marginBottom: '10px', whiteSpace: 'nowrap', marginLeft: '55px' }} />
 
-                            <Button label="Change Name" style={{ marginTop: '0px', marginBottom: '10px', marginLeft:'30px'}} />
-                        </Card>
+                    </Card>
 
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
 
                         <Card style={{border: '2px solid #00b4d8',borderRadius: '8px', marginLeft: '20px', marginTop: '10px',maxWidth: '400px' }}>
@@ -94,19 +102,6 @@ export function ProfilePage() {
                             </div>
                         </Card>
                     </div>
-                
-                    
-
-                    <Card style={{border: '4px solid #00b4d8',borderRadius: '8px', marginLeft: '20px', marginTop: '0px', width: '600px', height: '335px'}}>
-                        <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: '0px', marginTop: '0px'}}>
-                            <i className="pi pi-camera" style={{ marginRight: '10px', marginTop: '0px' }}></i>
-                            <p style={{ marginBottom: '0', marginTop: '0px' }}> Current Profile Picture</p>
-                        </div>
-                        <Card style={{border: '2px solid #00b4d8',borderRadius: '8px', marginLeft: '130px', marginTop: '20px', maxWidth: '300px', justifyContent: 'center', alignItems: 'center' }}>  
-                            <Avatar image={profileImage} className="mr-2" shape='circle' style={{ width: '8rem', height: '8rem', borderRadius: '50%', border: '4px solid #00b4d8', padding: '0.2rem', marginLeft: '70px' }} ></Avatar>
-                        </Card>
-                        <Button label="Change Profile Picture" style={{ marginTop: '10px', marginBottom: '10px', marginLeft:'30px'}} />
-                    </Card>
                 </div>
 
                 
