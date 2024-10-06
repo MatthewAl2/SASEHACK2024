@@ -281,15 +281,58 @@ def update_user(id):
 def update_task(id):
    task = Task.query.get_or_404(id)  # Find the task or return 404 if not found
    data = request.json
-   
+   task_description = data['description']
+
+     # Tokenize the input text
+   encoding = tokenizer.encode_plus(
+        task_description,
+        add_special_tokens=True,
+        max_length=max_len,
+        padding='max_length',
+        return_attention_mask=True,
+        return_tensors='pt',
+        truncation=True
+    )
+
+   input_ids = encoding['input_ids']
+   attention_mask = encoding['attention_mask']
+
+    # Make prediction using the model
+   with torch.no_grad():
+        output = model(input_ids=input_ids, attention_mask=attention_mask)
+        predicted_weight = output.item()  # Get the predicted task weight
+
    # Update the task's fields
    task.name = data.get('name', task.name)
-   task.weight = data.get('weight', task.weight)
+   task.weight = predicted_weight
    task.start_date = datetime.strptime(data['start_date'], '%Y-%m-%d %H:%M:%S') if 'start_date' in data else task.start_date
    task.end_date = datetime.strptime(data['end_date'], '%Y-%m-%d %H:%M:%S') if 'end_date' in data else task.end_date
    task.state = data.get('state', task.state)
-   task.tag = data.get('tag', task.tag)
+   task.tag = data.get('tags', task.tags)
    task.description = data.get('description', task.description)
+   
+   user = User.query.get(task.user_id)
+   if not user:
+      return jsonify({"error": "User not found"}), 404
+   new_tags = data.get('tags', [])  # Safely get the 'tags' value from the incoming data; default to empty list
+
+   if not isinstance(new_tags, list):
+      return jsonify({"error": "Tags must be provided as an array"}), 400  # Return error if not a list
+
+   # Ensure the tags field is initialized as a list
+   if user.tags is None:
+      user.tags = []  # Initialize as an empty list if tags is None
+   elif not isinstance(user.tags, list):
+      user.tags = []  # Ensure it is a list if it was not initialized correctly
+
+   # Debugging: Check the current tags
+   print(f"Current tags before appending: {user.tags}")
+
+   # Remove duplicates from new_tags
+   new_tags_set = set(new_tags)  # Convert to a set to eliminate duplicates
+
+   # Concatenate the new tags that do not already exist in user.tags
+   user.tags = list(set(user.tags) | new_tags_set)
    
    db.session.commit()
    return format_task(task)
