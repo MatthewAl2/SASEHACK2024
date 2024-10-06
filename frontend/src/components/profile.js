@@ -52,36 +52,39 @@ function Home() {
     }, []);
 
     return (
-        <div className="App">
+        <div className="App" style={{backgroundColor: '#eda6a0'}}>
             {/* Navbar */}
             <Menubar model={items} start={start} end={end} />
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%', marginTop: '10px' }}>
                 <p style={{ margin: 0, marginBottom: '0px'}}>Level {level}</p>
-                <ProgressBar value={progress} style={{ flex: 1, marginBottom: '0px'}} />
+                <ProgressBar value={progress} style={{ flex: 1, marginBottom: '0px', maxWidth:'1430px'}} />
             </div>
 
-            <h1>Profile</h1>
-            <Divider />
-            <div style={{ margin: '10px' }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: '0px' }}>
-                    <i className="pi pi-user" style={{ marginRight: '10px', marginTop: '0' }}></i>
-                    <p style={{ marginBottom: '0', marginTop: '0' }}>Username: {username}</p>
+            <h1 style={{marginBottom:'0px'}}>Profile</h1>
+                <Card style={{border: '4px solid #FFFFFF',borderRadius: '8px', marginLeft: '20px', marginTop: '0px', maxWidth: '300px'}}>
+                    <div style={{ margin: '0px' }}>
+                        <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: '0px', marginTop: '0px'}}>
+                            <i className="pi pi-user" style={{ marginRight: '10px', marginTop: '0px' }}></i>
+                            <p style={{ marginBottom: '0', marginTop: '0px' }}>Username: {username}</p>
+                        </div>
+                    </div>
+
+                    <Button label="Change Name" style={{ marginTop: '0px', marginBottom: '10px', marginLeft:'30px'}} />
+                </Card>
+
+
+            <Card style={{border: '4px solid #FFFFFF',borderRadius: '8px', marginLeft: '20px', marginTop: '10px',maxWidth: '400px' }}>
+                <div className="Pomodoro" style={{margin:'10px'}}> 
+                    <p style={{ display: 'flex', alignItems: 'center', marginBottom:'5px'}}>
+                        <i className="pi pi-hourglass" style={{ marginRight: '10px', marginTop: '0' }}></i>
+                        Pomodoro
+                        <InputSwitch checked={pomodoroChecked} onChange={(e) => setChecked(e.value)} style={{ marginLeft: '10px' }} />
+                    </p>
+                    <InputNumber value={pomodoroValue} onValueChange={(e) => setValue(e.value)} showButtons buttonLayout="horizontal"
+                    incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" step={1} min={0} max={60} disabled={!pomodoroChecked} style={{marginLeft: '15px', marginTop: '0px'}} />
                 </div>
-            </div>
-
-            <Button label="Change Name" style={{ marginTop: '0px', marginBottom: '10px', marginLeft:'30px'}} />
-
-
-            <div className="Pomodoro" style={{margin:'10px'}}> 
-                <p style={{ display: 'flex', alignItems: 'center', marginBottom:'5px'}}>
-                    <i className="pi pi-hourglass" style={{ marginRight: '10px', marginTop: '0' }}></i>
-                    Pomodoro
-                    <InputSwitch checked={pomodoroChecked} onChange={(e) => setChecked(e.value)} style={{ marginLeft: '10px' }} />
-                </p>
-                <InputNumber value={pomodoroValue} onValueChange={(e) => setValue(e.value)} showButtons buttonLayout="horizontal"
-                incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" step={1} min={0} max={60} disabled={!pomodoroChecked} style={{marginLeft: '15px', marginTop: '0px'}} />
-            </div>
+            </Card>
             
 
             <h1>Achievements</h1>
@@ -93,7 +96,7 @@ function Home() {
                     overflowY: 'auto', 
                     width: '80rem',
                     margin: '10px',
-                    border: '2px solid #007bff',
+                    border: '2px solid #FFFFFF',
                     borderRadius: '20px',
                     boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
                     boxSizing: 'border-box', 
@@ -111,7 +114,7 @@ function Home() {
                             <Card className="achievement item" style={{
                                 marginBottom: '0.5rem',
                                 backgroundColor: '#a2d9a1', 
-                                border: '4px solid #007bff',    
+                                border: '4px solid #FFFFFF',    
                                 borderRadius: '8px',        
                                 padding: '1rem',   
                                 }}>
