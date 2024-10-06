@@ -37,7 +37,7 @@ export default function LoginPage() {
             alt={item}
             style={{
             width: '100%',
-            height: '250px',
+            height: '100%',
             borderRadius: '3px'}}/>
          );
    };
@@ -58,7 +58,6 @@ export default function LoginPage() {
 
 
    
-    // Define styles as JS objects
     const styles = {
         loginPage: {
             display: 'flex',
@@ -72,7 +71,7 @@ export default function LoginPage() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            padding: '20px',
+            padding: '40px',
             backgroundColor: 'white',
             borderRadius: '8px',
             boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
@@ -82,7 +81,7 @@ export default function LoginPage() {
         galleryContainer: {
             marginBottom: '20px',
             width: '100%',
-            maxWidth: '640px',
+            maxWidth: '100%',
         },
         loginForm: {
             width: '100%',
