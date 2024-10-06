@@ -49,10 +49,13 @@ const Card = ({
 <PrimeCard
     header={
         <div style={{ textAlign: 'center', marginTop: '30px', padding: '0 25px' }}>
+            <div>
+                <label style={{marginLeft: "90%"}}>{card.weight} </label>
+            </div>
             {card.isEditing ? (
                 <input
                     type="text"
-                    value={card.title}
+                    value={card.title + " " + card.weight}
                     onChange={(e) => onContentChange('title', e.target.value)}
                     style={{ width: '100%', textAlign: 'center' }}
                     aria-label="Task Title"

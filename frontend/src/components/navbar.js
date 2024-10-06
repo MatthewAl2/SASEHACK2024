@@ -42,7 +42,7 @@ export default function Navbar(props) {
             label="Login" 
             icon="pi pi-user" 
             className="p-button-rounded" 
-            onClick={() => navigate('/login')}
+            onClick={() => navigate('/loginPage')}
         />
     );
 
