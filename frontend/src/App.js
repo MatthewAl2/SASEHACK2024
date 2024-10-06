@@ -3,11 +3,12 @@ import 'primereact/resources/themes/saga-blue/theme.css'; // Choose your desired
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css'; 
 import { Routes, Route } from 'react-router-dom';
-import SignUp from './pages/signUpPage';  
 
 // Pages
-import Home from './components/homepage';
+import Home from './pages/homepage';
 import LoginPage from './pages/loginPage';
+import SignUp from './pages/signUpPage';
+import { ProfilePage } from './pages/profile';
 
 function App() {
   return (
@@ -16,6 +17,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/loginPage" element={<LoginPage />} />
           <Route path="/signUpPage" element={<SignUp />} />
+          <Route path="/profile" element={<ProfilePage />} />
+
         </Routes>
     </PrimeReactProvider>
   );

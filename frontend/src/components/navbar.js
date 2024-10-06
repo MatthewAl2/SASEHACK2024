@@ -6,9 +6,10 @@ import { useNavigate } from "react-router-dom";
 export default function Navbar () {
    const navigate = useNavigate();
    const items = [
-      { label: 'Home', icon: 'pi pi-home', onclick: () => navigate('/') },
+      { label: 'Home', icon: 'pi pi-home', command: () => navigate('/')},
       { label: 'About', icon: 'pi pi-info-circle' },
-      { label: 'Contact', icon: 'pi pi-envelope' }
+      { label: 'Contact', icon: 'pi pi-envelope' },
+      { label: 'Profile', icon: 'pi pi-envelope', command: () => navigate('/profile') }
    ];
 
    const logo = <img alt="logo" src='../images/Ease Logo.png' height="40" />;
