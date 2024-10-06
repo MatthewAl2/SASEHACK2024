@@ -33,15 +33,83 @@ export default function Home() {
         fetchData();
     }, [userGlobalID]); // Dependency array includes userGlobalID if it changes
 
+    const formatDate = (date) =>{
+        const dateObj = new Date(date);
+
+        // Get the components of the date
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');  // Months are zero-indexed
+        const day = String(dateObj.getDate()).padStart(2, '0');
+
+        const hours = String(dateObj.getHours()).padStart(2, '0');
+        const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+        const seconds = String(dateObj.getSeconds()).padStart(2, '0');
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+
+    const formatState = (state) =>{
+        const statusMapping = {
+            'Not Started': 0,
+            'In Progress': 1,
+            'Completed': 2
+        };
+        
+        // Example usage:
+      
+        return statusMapping[state];
+    }
+    
+
+    const postTaskData = async (newCardTitle, newCardContent, startdateObj, enddateObj) => {
+        try {
+            // Make the POST request using axios
+            const response = await axios.post('http://127.0.0.1:5000/users/' + userGlobalID + '/tasks', {
+                name: newCardTitle,
+                weight: 0,
+                description: newCardContent,
+                state: 0,
+                start_date: startdateObj,
+                end_date: enddateObj,
+                tags: [],
+                daily_task: 0,
+                user_id: userGlobalID
+            });
+    
+            // Return the response data
+            return response.data.id;
+        } catch (error) {
+            console.error('Error making POST request:', error);
+            return null;  // Return null or handle the error appropriately
+        }
+    };
+
+   
+    const putTaskData = async (card) => {
+        
+        try {
+            // Make the POST request using axios
+            const id = await card.id
+            const response = await axios.put('http://127.0.0.1:5000/tasks/' + id, {
+                name: newCardTitle,
+                weight: 0,
+                description: newCardContent,
+                state: formatState(card.state),
+                start_date: formatDate(card.startDate),
+                end_date: formatDate(card.dueDate),
+                tags: [],
+            });
+    
+                // Return the response data
+                return response.data.id;
+            } catch (error) {
+                console.error('Error making POST request:', error);
+                return null;  // Return null or handle the error appropriately
+            }
+    };
+
 
     const totalXPBar = 200 / (1 + Math.E ** (-0.025 * (data.level - 150)));
-    console.log(data.xp)
-
-
-
-
-
-
+    
 
     const loadCards = () => {
         const savedCards = localStorage.getItem('cards');
@@ -58,6 +126,8 @@ export default function Home() {
 
     useEffect(() => {
         localStorage.setItem('cards', JSON.stringify(cards));
+
+
     }, [cards]);
 
     const toggleEdit = (id) => {
@@ -70,8 +140,10 @@ export default function Home() {
         );
     };
 
-    const saveCard = (id) => {
-        toggleEdit(id);
+    const saveCard = (card) => {
+        toggleEdit(card);
+        putTaskData(card, card.id)
+        
     };
 
     const updateCardContent = (id, field, value) => {
@@ -80,6 +152,7 @@ export default function Home() {
                 card.id === id
                     ? { ...card, [field]: value }
                     : card
+                
             )
         );
     };
@@ -90,27 +163,41 @@ export default function Home() {
                 if (card.id === id) {
                     const updatedCard = { ...card, completed: !card.completed };
                     const newStatus = updatedCard.completed ? 'Completed' : 'Not Started';
+                    
                     return { ...updatedCard, status: newStatus };
                 }
+
                 return card;
             })
         );
+
+
+
     };
 
     const changeCardStatus = (id, newStatus) => {
+        console.log(id)
         setCards((prevCards) =>
             prevCards.map((card) =>
                 card.id === id
-                    ? { ...card, status: newStatus }
-                    : card
+                    ? { ...card, status: newStatus}
+                    : card     
+ 
             )
         );
     };
 
+    
+
     const addCard = () => {
         if (newCardTitle && newCardContent) {
+            const startdateObj = formatDate(startDate);
+
+            const enddateObj = formatDate(dueDate);
+            const taskId = postTaskData(newCardTitle, newCardContent, startdateObj, enddateObj)
+            
             const newCard = {
-                id: cards.length + 1,
+                id: taskId,
                 title: newCardTitle,
                 content: newCardContent,
                 isEditing: false,
@@ -186,7 +273,7 @@ export default function Home() {
                                     card={card}
                                     weight={card.weight}
                                     onEditToggle={() => toggleEdit(card.id)}
-                                    onSave={() => saveCard(card.id)}
+                                    onSave={() => saveCard(card)}
                                     onCancel={() => toggleEdit(card.id)}
                                     onContentChange={(field, value) => updateCardContent(card.id, field, value)}
                                     onDateChange={updateCardDate}
@@ -205,8 +292,8 @@ export default function Home() {
                             <Card
                                 card={card}
                                 weight={card.weight}
-                                onEditToggle={() => toggleEdit(card.id)}
-                                onSave={() => saveCard(card.id)}
+                                onEditToggle={() => toggleEdit( )}
+                                onSave={() => saveCard(card)}
                                 onCancel={() => toggleEdit(card.id)}
                                 onContentChange={(field, value) => updateCardContent(card.id, field, value)}
                                 onMarkComplete={() => toggleCompleted(card.id)}
@@ -225,7 +312,7 @@ export default function Home() {
                             <Card
                                 card={card}
                                 onEditToggle={() => toggleEdit(card.id)}
-                                onSave={() => saveCard(card.id)}
+                                onSave={() => saveCard(card)}
                                 onCancel={() => toggleEdit(card.id)}
                                 onContentChange={(field, value) => updateCardContent(card.id, field, value)}
                                 onMarkComplete={() => toggleCompleted(card.id)}
@@ -244,7 +331,7 @@ export default function Home() {
                             <Card
                                 card={card}
                                 onEditToggle={() => toggleEdit(card.id)}
-                                onSave={() => saveCard(card.id)}
+                                onSave={() => saveCard(card)}
                                 onCancel={() => toggleEdit(card.id)}
                                 onContentChange={(field, value) => updateCardContent(card.id, field, value)}
                                 onMarkComplete={() => toggleCompleted(card.id)}
