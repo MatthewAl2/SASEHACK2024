@@ -1,6 +1,6 @@
 /* index.css */
-@import url('https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
 
 body {
-  font-family: 'Gamja Flower', cursive;
+  font-family: 'Libre Baskerville', serif; /* Use the defined font */
 }

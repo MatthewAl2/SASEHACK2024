@@ -1,8 +1,4 @@
-
-body {
-    font-family: 'Gamma Flower', sans-serif; /* Apply the font to the body */
+* {
+    font-family: 'Libre Baskerville', sans-serif; /* Replace 'Serot' with the correct font name */
 }
-
-h1, h2, p {
-    font-family: 'Gamma Flower', sans-serif; /* Specific styles for headers and paragraphs */
-}
+  
