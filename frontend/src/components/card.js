@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card as PrimeCard } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
@@ -19,18 +19,38 @@ const Card = ({
         { label: 'Completed', value: 'Completed' },
     ];
 
+    const [tempWeight, setTempWeight] = useState(card.weight); // Temporary weight state
+
     // Format date function
     const formatDate = (date) => {
         if (!date) return 'N/A';
         return new Date(date).toLocaleDateString(); // Format to locale date string
     };
 
+    // Reset tempWeight when card changes
+    useEffect(() => {
+        setTempWeight(card.weight);
+    }, [card]);
+
+    // Function to determine border color based on weight
+    const getBorderColor = (weight) => {
+        if (weight >= 1 && weight <= 4) return '#add8e6'; // Light Blue
+        if (weight >= 5 && weight <= 9) return '#90ee90'; // Light Green
+        if (weight >= 10 && weight <= 14) return '#ffffe0'; // Light Yellow
+        if (weight >= 15 && weight <= 19) return '#ffcc99'; // Light Orange
+        if (weight >= 20 && weight <= 24) return '#ff9999'; // Light Red
+        if (weight === 25) return '#ff0000'; // Neon red
+        return '#007bff'; // Default color if weight is outside the defined range
+    };
+
+    const borderColor = getBorderColor(tempWeight); // Get border color based on weight
+
     return (
         <div
             style={{
                 width: '18rem',
                 margin: '10px',
-                border: '1px solid #007bff',
+                border: `1px solid ${borderColor}`, // Set border color
                 borderRadius: '20px',
                 boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
                 overflow: 'hidden',
@@ -38,7 +58,7 @@ const Card = ({
         >
             <PrimeCard
                 header={
-                    <div style={{ textAlign: 'center' }}>
+                    <div style={{ textAlign: 'center', marginTop: '30px', padding: '0 25px' }}>
                         {card.isEditing ? (
                             <input
                                 type="text"
@@ -74,14 +94,20 @@ const Card = ({
                                 <Button
                                     label="Save"
                                     icon="pi pi-check"
-                                    onClick={onSave}
+                                    onClick={() => {
+                                        onContentChange('weight', tempWeight); // Save the temporary weight
+                                        onSave();
+                                    }}
                                     aria-label="Save Task"
                                     style={{ flex: 1 }}
                                 />
                                 <Button
                                     label="Cancel"
                                     icon="pi pi-times"
-                                    onClick={onCancel}
+                                    onClick={() => {
+                                        setTempWeight(card.weight); // Reset to original weight on cancel
+                                        onCancel();
+                                    }}
                                     aria-label="Cancel Edit"
                                     style={{ marginLeft: 'auto', flex: 1 }}
                                 />
@@ -104,34 +130,57 @@ const Card = ({
                     borderRadius: '20px',
                 }}
             >
-                {/* New layout for centering description */}
-                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%'}}>
-                    <div style={{ textAlign: 'center', padding: '10px' }}>
-                        {card.isEditing ? (
-                            <textarea
-                                value={card.content}
-                                onChange={(e) => onContentChange('content', e.target.value)}
-                                style={{ width: '100%', height: '100px', textAlign: 'center' }}
-                                aria-label="Task Content"
-                            />
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
+                    <div style={{ textAlign: 'center', padding: '0px', flexGrow: 1 }}>
+                        {/* Display content when not editing */}
+                        {!card.isEditing ? (
+                            <>
+                                <p className="m-0" style={{ marginBottom: '0px', marginTop: '-40px', wordWrap: 'break-word', overflowWrap: 'break-word', whiteSpace: 'normal' }}>{card.content}</p>
+                                <Dropdown
+                                    options={statusOptions}
+                                    value={card.status}
+                                    onChange={(e) => {
+                                        onStatusChange(card.id, e.value);
+                                    }}
+                                    placeholder="Select Status"
+                                    style={{ width: '100%', marginTop: '10px' }}
+                                    aria-label="Task Status"
+                                />
+                            </>
                         ) : (
-                            <p className="m-0">{card.content}</p>
+                            // Editable content
+                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                <textarea
+                                    value={card.content}
+                                    onChange={(e) => onContentChange('content', e.target.value)}
+                                    style={{
+                                        width: '100%',
+                                        height: '100px', // Fixed height for editing
+                                        textAlign: 'center',
+                                        marginBottom: '40px',
+                                        resize: 'none', // Prevent resizing
+                                        overflowY: 'auto', // Allow vertical scrolling if needed
+                                        wordWrap: 'break-word', // Ensure long words break to the next line
+                                        overflowWrap: 'break-word', // Ensure long words break to the next line
+                                        whiteSpace: 'normal', // Allow text wrapping
+                                    }}
+                                    aria-label="Task Content"
+                                />
+                                <Dropdown
+                                    options={statusOptions}
+                                    value={card.status}
+                                    onChange={(e) => {
+                                        onStatusChange(card.id, e.value);
+                                    }}
+                                    placeholder="Select Status"
+                                    style={{ width: '100%' }}
+                                    aria-label="Task Status"
+                                />
+                            </div>
                         )}
-                        <div style={{ marginTop: '10px' }}>
-                            <Dropdown
-                                options={statusOptions}
-                                value={card.status}
-                                onChange={(e) => {
-                                    onStatusChange(card.id, e.value);
-                                }}
-                                placeholder="Select Status"
-                                style={{ width: '100%' }}
-                                aria-label="Task Status"
-                            />
-                        </div>
                     </div>
                     {/* Display Start Date and Due Date */}
-                    <div style={{ textAlign: 'center', marginTop: 'auto', padding: '10px' }}>
+                    <div style={{ textAlign: 'center', padding: '10px' }}>
                         {card.isEditing ? (
                             <>
                                 <div>
@@ -157,17 +206,19 @@ const Card = ({
                                     <label>Task Weight:</label>
                                     <input
                                         type="number"
-                                        value={card.weight}
+                                        value={tempWeight !== undefined ? tempWeight : ''} // Use temporary weight
                                         onChange={(e) => {
-                                            const weightValue = Math.min(Math.max(Number(e.target.value), 1), 25);
-                                            onContentChange('weight', weightValue);
+                                            const weightValue = e.target.value === ''
+                                                ? '' // Allow empty input
+                                                : Math.min(Math.max(Number(e.target.value), 1), 25);
+                                            setTempWeight(weightValue); // Update temporary weight
                                         }}
                                         min="1"
                                         max="25"
                                         style={{ width: '100%' }}
                                         aria-label="Task Weight"
                                     />
-                                    {card.weight < 1 || card.weight > 25 ? (
+                                    {(tempWeight < 1 || tempWeight > 25) && tempWeight !== undefined ? (
                                         <span style={{ color: 'red', fontSize: '0.8em' }}>
                                             Weight must be between 1 and 25.
                                         </span>

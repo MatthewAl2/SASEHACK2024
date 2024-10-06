@@ -294,12 +294,12 @@ export default function Home() {
                     </div>
 
                     <div className="p-field" style={{ marginBottom: '1rem' }}>
-                        <label htmlFor="taskWeight">Task Weight (1-5)</label>
+                        <label htmlFor="taskWeight">Task Weight (1-25)</label>
                         <input
                             type="number"
                             id="taskWeight"
                             min="1"
-                            max="5"
+                            max="25"
                             value={taskWeight}
                             onChange={(e) => setTaskWeight(parseInt(e.target.value))}
                             style={{ width: '100%' }}
