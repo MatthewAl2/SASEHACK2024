@@ -63,19 +63,24 @@ function Home() {
 
             <h1>Profile</h1>
             <Divider />
-            <div className="User name" style={{margin:'10px'}}> 
-                <p style={{marginBottom: '5px'}}>Username: {username}</p>
-                <Button label = "Change Name" style={{marginTop: '0px', marginBottom: '20px', margin:'10px'}}/>
-                
-                
+            <div style={{ margin: '10px' }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: '0px' }}>
+                    <i className="pi pi-user" style={{ marginRight: '10px', marginTop: '0' }}></i>
+                    <p style={{ marginBottom: '0', marginTop: '0' }}>Username: {username}</p>
+                </div>
             </div>
+
+            <Button label="Change Name" style={{ marginTop: '0px', marginBottom: '10px', marginLeft:'30px'}} />
+
+
             <div className="Pomodoro" style={{margin:'10px'}}> 
                 <p style={{ display: 'flex', alignItems: 'center', marginBottom:'5px'}}>
+                    <i className="pi pi-hourglass" style={{ marginRight: '10px', marginTop: '0' }}></i>
                     Pomodoro
                     <InputSwitch checked={pomodoroChecked} onChange={(e) => setChecked(e.value)} style={{ marginLeft: '10px' }} />
                 </p>
                 <InputNumber value={pomodoroValue} onValueChange={(e) => setValue(e.value)} showButtons buttonLayout="horizontal"
-                incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" step={1} min={0} max={60} disabled={!pomodoroChecked} style={{margin:'10px', marginTop: '0px'}} />
+                incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" step={1} min={0} max={60} disabled={!pomodoroChecked} style={{marginLeft: '15px', marginTop: '0px'}} />
             </div>
             
 
