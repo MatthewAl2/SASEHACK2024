@@ -107,6 +107,22 @@ export default function Home() {
             }
     };
 
+    const deleteData = async (card) => {
+        
+        try {
+            // Make the POST request using axios
+            const id = await card.id
+            const response = await axios.delete('http://127.0.0.1:5000/tasks/' + id, {
+                
+            });
+    
+                return response.data;
+            } catch (error) {
+                console.error('Error making POST request:', error);
+                return null;  // Return null or handle the error appropriately
+            }
+    };
+
 
     const totalXPBar = 200 / (1 + Math.E ** (-0.025 * (data.level - 150)));
     
@@ -215,8 +231,10 @@ export default function Home() {
         }
     };
 
-    const removeCard = (id) => {
-        setCards((prevCards) => prevCards.filter((card) => card.id !== id));
+    const removeCard = (card) => {
+        const comp = card.id
+        setCards((prevCards) => prevCards.filter((card) => card.id !== comp));
+        deleteData(card)
     };
 
     const updateCardDate = (field, value, id) => {
@@ -279,7 +297,7 @@ export default function Home() {
                                     onDateChange={updateCardDate}
                                     onMarkComplete={() => toggleCompleted(card.id)}
                                     onStatusChange={changeCardStatus}
-                                    onRemove={() => removeCard(card.id)}
+                                    onRemove={() => removeCard(card)}
                                 />
                             </div>
                         ))
@@ -298,7 +316,7 @@ export default function Home() {
                                 onContentChange={(field, value) => updateCardContent(card.id, field, value)}
                                 onMarkComplete={() => toggleCompleted(card.id)}
                                 onStatusChange={changeCardStatus}
-                                onRemove={() => removeCard(card.id)}
+                                onRemove={() => removeCard(card)}
                             />
                         </div>
                     ))
@@ -317,7 +335,7 @@ export default function Home() {
                                 onContentChange={(field, value) => updateCardContent(card.id, field, value)}
                                 onMarkComplete={() => toggleCompleted(card.id)}
                                 onStatusChange={changeCardStatus}
-                                onRemove={() => removeCard(card.id)}
+                                onRemove={() => removeCard(card)}
                             />
                         </div>
                     ))
@@ -336,7 +354,7 @@ export default function Home() {
                                 onContentChange={(field, value) => updateCardContent(card.id, field, value)}
                                 onMarkComplete={() => toggleCompleted(card.id)}
                                 onStatusChange={changeCardStatus}
-                                onRemove={() => removeCard(card.id)}
+                                onRemove={() => removeCard(card)}
                             />
                         </div>
                     ))
