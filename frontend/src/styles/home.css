@@ -1,0 +1,8 @@
+
+body {
+    font-family: 'Gamma Flower', sans-serif; /* Apply the font to the body */
+}
+
+h1, h2, p {
+    font-family: 'Gamma Flower', sans-serif; /* Specific styles for headers and paragraphs */
+}

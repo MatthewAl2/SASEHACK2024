@@ -151,7 +151,7 @@ export default function Home() {
     const allTasks = [...notStartedTasks, ...inProgressTasks, ...completedTasks];
 
     return (
-        <div className="App">
+        <div className="App home-background">
             <Menubar model={items} start={start} end={end} />
 
             <div className="hero" style={{ textAlign: 'center', marginTop: '20px' }}>
