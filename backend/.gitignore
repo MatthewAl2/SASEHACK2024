@@ -1,0 +1,7 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# model
+task_weight_prediction/task_weight_model.pth
+
+# data
+__pycache__
