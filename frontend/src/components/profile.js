@@ -10,6 +10,7 @@ import { Divider } from 'primereact/divider';
 import { ProgressBar } from 'primereact/progressbar';
 import { Card } from 'primereact/card';
 import Ease_Logo from './Ease Logo.png';
+import Profile_image from './profile.jpg';
 const showerPath = "images\shower.jpg"
 const space = "       "
 
@@ -22,7 +23,7 @@ function Home() {
 
 
     const start = <img alt="logo" src={Ease_Logo} height="40" />;
-    const end = <Button label="Sign Up" icon="pi pi-user" className="p-button-rounded" />;
+    const end = <Button label={<img src={Profile_image} style={{width: '1.5rem', height: '1.5rem', borderRadius: '50%'  }} />}  className="p-button-rounded" />;
     const [username, setUsername] = useState("USER NAME");
     const [pomodoroValue, setValue] = useState(5);
     const [pomodoroChecked, setChecked] = useState(false);
@@ -62,29 +63,50 @@ function Home() {
             </div>
 
             <h1 style={{marginBottom:'0px'}}>Profile</h1>
-                <Card style={{border: '4px solid #FFFFFF',borderRadius: '8px', marginLeft: '20px', marginTop: '0px', maxWidth: '300px'}}>
-                    <div style={{ margin: '0px' }}>
-                        <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: '0px', marginTop: '0px'}}>
-                            <i className="pi pi-user" style={{ marginRight: '10px', marginTop: '0px' }}></i>
-                            <p style={{ marginBottom: '0', marginTop: '0px' }}>Username: {username}</p>
-                        </div>
+                
+                <div style={{ display: 'flex', gap: '200px', marginTop: '10px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        <Card style={{border: '4px solid #FFFFFF',borderRadius: '8px', marginLeft: '20px', marginTop: '0px', maxWidth: '300px'}}>
+                            <div style={{ margin: '0px' }}>
+                                <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: '0px', marginTop: '0px'}}>
+                                    <i className="pi pi-user" style={{ marginRight: '10px', marginTop: '0px' }}></i>
+                                    <p style={{ marginBottom: '0', marginTop: '0px' }}>Username: {username}</p>
+                                </div>
+                            </div>
+
+                            <Button label="Change Name" style={{ marginTop: '0px', marginBottom: '10px', marginLeft:'30px'}} />
+                        </Card>
+
+
+
+                        <Card style={{border: '4px solid #FFFFFF',borderRadius: '8px', marginLeft: '20px', marginTop: '10px',maxWidth: '400px' }}>
+                            <div className="Pomodoro" style={{margin:'10px'}}> 
+                                <p style={{ display: 'flex', alignItems: 'center', marginBottom:'5px'}}>
+                                    <i className="pi pi-hourglass" style={{ marginRight: '10px', marginTop: '0' }}></i>
+                                    Pomodoro
+                                    <InputSwitch checked={pomodoroChecked} onChange={(e) => setChecked(e.value)} style={{ marginLeft: '10px' }} />
+                                </p>
+                                <InputNumber value={pomodoroValue} onValueChange={(e) => setValue(e.value)} showButtons buttonLayout="horizontal"
+                                incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" step={1} min={0} max={60} disabled={!pomodoroChecked} style={{marginLeft: '15px', marginTop: '0px'}} />
+                            </div>
+                        </Card>
                     </div>
+                
+                    
 
-                    <Button label="Change Name" style={{ marginTop: '0px', marginBottom: '10px', marginLeft:'30px'}} />
-                </Card>
-
-
-            <Card style={{border: '4px solid #FFFFFF',borderRadius: '8px', marginLeft: '20px', marginTop: '10px',maxWidth: '400px' }}>
-                <div className="Pomodoro" style={{margin:'10px'}}> 
-                    <p style={{ display: 'flex', alignItems: 'center', marginBottom:'5px'}}>
-                        <i className="pi pi-hourglass" style={{ marginRight: '10px', marginTop: '0' }}></i>
-                        Pomodoro
-                        <InputSwitch checked={pomodoroChecked} onChange={(e) => setChecked(e.value)} style={{ marginLeft: '10px' }} />
-                    </p>
-                    <InputNumber value={pomodoroValue} onValueChange={(e) => setValue(e.value)} showButtons buttonLayout="horizontal"
-                    incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" step={1} min={0} max={60} disabled={!pomodoroChecked} style={{marginLeft: '15px', marginTop: '0px'}} />
+                    <Card style={{border: '4px solid #FFFFFF',borderRadius: '8px', marginLeft: '20px', marginTop: '0px', width: '600px'}}>
+                        <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: '0px', marginTop: '0px'}}>
+                            <i className="pi pi-camera" style={{ marginRight: '10px', marginTop: '0px' }}></i>
+                            <p style={{ marginBottom: '0', marginTop: '0px' }}> Current Profile Picture</p>
+                        </div>
+                        <Card style={{border: '4px solid #FFFFFF',borderRadius: '8px', marginLeft: '130px', marginTop: '20px', maxWidth: '300px', justifyContent: 'center', alignItems: 'center' }}>  
+                            <Avatar image={Profile_image} className="mr-2" shape='circle' style={{ width: '12rem', height: '12rem', borderRadius: '50%', border: '4px solid #a2d9a1', padding: '0.2rem', marginLeft: '30px' }} ></Avatar>
+                        </Card>
+                        <Button label="Change Profile Picture" style={{ marginTop: '10px', marginBottom: '10px', marginLeft:'30px'}} />
+                    </Card>
                 </div>
-            </Card>
+
+                
             
 
             <h1>Achievements</h1>
@@ -120,8 +142,8 @@ function Home() {
                                 }}>
                                 <div className="flex" style={{ alignItems: 'center'}}>
                                     {item.unlocked ? (
-                                        <>
-                                            <Avatar image="https://primereact.org/images/logo.png" className="mr-2" style={{width: '4rem', height: '4rem', borderRadius: '50%', border: '4px solid #efda6b', padding: '0.2rem', }}/>
+                                        <> 
+                                            <Avatar image="https://primereact.org/images/logo.png" className="mr-2" shape='circle' style={{width: '4rem', height: '4rem', borderRadius: '50%', border: '4px solid #efda6b', padding: '0.2rem', }}/>
                                             <div style={{ flex: '1', marginLeft: '0,5rem' }}>
                                                 <h4 style={{ margin: '0 0 0.2rem 0', fontSize: '1rem' }}>{item.title}</h4> 
                                                 <p style={{ margin: '0', fontSize: '0.875rem' }}>{item.description}</p> 
