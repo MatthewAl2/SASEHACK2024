@@ -16,7 +16,7 @@ export function ProfilePage() {
     const easeLogo = "../images/Ease Logo.png";
     const solidBlackImage = "../images/Solid_black.png"; // Fixed path
     const defaultImage = "../images/default.png";
-
+    const hiddenImage = "../images/hidden.jpg";
 
     const [username, setUsername] = useState("USER NAME");
     const [pomodoroValue, setPomodoroValue] = useState(5);
@@ -53,10 +53,10 @@ export function ProfilePage() {
         { title: 'Establishing yourself', description: 'You edited your profile!', unlocked: true, imagesrc: profileImage },
         { title: 'Getting it done', description: 'You completed a task!', unlocked: true, imagesrc: defaultImage },
         { title: 'Level Up!', description: 'You leveled up!', unlocked: true, imagesrc: defaultImage },
-        { title: 'Achievement 5', description: 'This is hard', unlocked: false, imagesrc: defaultImage },
-        { title: 'Achievement 6', description: '6th achievement', unlocked: false, imagesrc: defaultImage },
-        { title: 'Achievement 7', description: 'Testing!', unlocked: false, imagesrc: defaultImage },
-        { title: 'Achievement 8', description: 'Final Test Achievement!', unlocked: false, imagesrc: defaultImage },
+        { title: 'Hidden Achievement', description: 'This is hard', unlocked: true, imagesrc: hiddenImage },
+        { title: 'Hidden Achievement', description: 'Do more tasks to find out!', unlocked: true, imagesrc: hiddenImage },
+        { title: 'Hidden Achievement', description: 'Its a secret', unlocked: true, imagesrc: hiddenImage },
+        { title: 'Hidden Achievement', description: 'Final Test Achievement!', unlocked: true, imagesrc: hiddenImage },
     ];
 
     useEffect(() => {
