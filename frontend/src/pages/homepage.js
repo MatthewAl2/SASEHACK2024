@@ -135,7 +135,8 @@ export default function Home() {
                 return null;  // Return null or handle the error appropriately
             }
     };
-    
+
+
     // Delete a task
     const deleteData = async (card) => {
         
@@ -153,26 +154,11 @@ export default function Home() {
             }
     };
 
-
-    const userXP = data[0]?.xp !== undefined ? data[0].xp : 0;
-    const userLevel = data[0]?.level !== undefined ? data[0].level : 0;
-    const totalXPBar = Math.round(200 / (1 + Math.E ** (-0.025 * (userLevel - 1))));
-    const progressBarVal = Math.round((userXP / totalXPBar) * 100);
-
-    console.log(userXP);
-    console.log(userLevel);
-    console.log(totalXPBar);
     
-
-
-    // const userLoggedIn = () => {
-    //     if (userGlobalID === -1) {
-    //         return false;
-    //     } 
-    //     else {
-    //         return true
-    //     }
-    // }
+    var userXP = data[0]?.xp !== undefined ? data[0].xp : 0;
+    var userLevel = data[0]?.level !== undefined ? data[0].level : 0;
+    var totalXPBar = Math.round(200 / (1 + Math.E ** (-0.025 * (userLevel - 1))));
+    var progressBarVal = Math.round((userXP / totalXPBar) * 100);
 
 
     const loadCards = () => {
@@ -281,6 +267,30 @@ export default function Home() {
         );
     };
 
+
+    const putUserData = async () => {
+        userXP += 10;
+        if (userXP >= totalXPBar) {
+            userLevel += 1;
+            userXP = userXP - totalXPBar;
+        }
+         await axios.put('http://127.0.0.1:5000/users/' + globalID, {
+            username: data[0].username,
+            level: userLevel,
+            xp: userXP,
+            tags: data[0].tags,
+            pomodoro: data[0].pomodoro,
+          }
+        )      
+
+    };
+
+    const changeCurrentStatus = (id, newStatus) => {
+        changeCardStatus(id, newStatus);
+        if (newStatus === 'Completed') {   
+            putUserData();
+        }
+    };
     
 
     const  addCard = async () => {
@@ -403,13 +413,13 @@ export default function Home() {
                                     onContentChange={(field, value) => updateCardContent(card.id, field, value)}
                                     onDateChange={updateCardDate}
                                     onMarkComplete={() => toggleCompleted(card.id)}
-                                    onStatusChange={changeCardStatus}
+                                    onStatusChange={changeCurrentStatus}
                                     onRemove={() => removeCard(card)}
                                 />
                             </div>
                         ))
                     ) : (
-                        <p>No tasks available.</p>
+                        <p>You are loved.</p>
                     )
                 ) : activeTab === 'Not Started' && notStartedTasks.length > 0 ? (
                     notStartedTasks.map((card) => (
@@ -422,7 +432,7 @@ export default function Home() {
                                 onCancel={() => toggleEdit(card.id)}
                                 onContentChange={(field, value) => updateCardContent(card.id, field, value)}
                                 onMarkComplete={() => toggleCompleted(card.id)}
-                                onStatusChange={changeCardStatus}
+                                onStatusChange={changeCurrentStatus}
                                 onRemove={() => removeCard(card)}
                             />
                         </div>
@@ -441,7 +451,7 @@ export default function Home() {
                                 onCancel={() => toggleEdit(card.id)}
                                 onContentChange={(field, value) => updateCardContent(card.id, field, value)}
                                 onMarkComplete={() => toggleCompleted(card.id)}
-                                onStatusChange={changeCardStatus}
+                                onStatusChange={changeCurrentStatus}
                                 onRemove={() => removeCard(card)}
                             />
                         </div>
@@ -460,7 +470,7 @@ export default function Home() {
                                 onCancel={() => toggleEdit(card.id)}
                                 onContentChange={(field, value) => updateCardContent(card.id, field, value)}
                                 onMarkComplete={() => toggleCompleted(card.id)}
-                                onStatusChange={changeCardStatus}
+                                onStatusChange={changeCurrentStatus}
                                 onRemove={() => removeCard(card)}
                             />
                         </div>

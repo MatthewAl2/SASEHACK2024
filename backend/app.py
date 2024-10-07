@@ -272,7 +272,6 @@ def update_user(id):
    
    # Update the user's fields
    user.username = data.get('username', user.username)
-   user.password = data.get('password', user.password)
    user.level = data.get('level', user.level)
    user.xp = data.get('xp', user.xp)
    user.tags = data.get('tags', user.tags)
